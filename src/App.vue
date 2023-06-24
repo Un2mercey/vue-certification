@@ -1,14 +1,31 @@
 <script setup>
-import { items } from './movies.json';
+import { onBeforeMount, ref } from 'vue';
+import MovieList from '@/components/MovieList.vue';
+import { items } from './mocks/movies.json';
 
-/*
- This is an Icon that you can use to represent the stars if you like
- otherwise you could just use a simple ⭐️ emoji, or * character.
-*/
-// import { StarIcon } from "@heroicons/vue/24/solid";
+const movies = ref([]);
+
+onBeforeMount(async () => {
+    const imagesToLoad = items.map(({ image }) => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = image;
+            img.onload = resolve;
+            img.onerror = reject;
+        });
+    });
+
+    try {
+        await Promise.all(imagesToLoad);
+        movies.value = [...items];
+    } catch {
+        console.error("Some of images hasn't been loaded!");
+    }
+});
 </script>
 
 <template>
-    <!-- This is where your template goes	-->
-    <div></div>
+    <Suspense>
+        <MovieList :movies="movies" />
+    </Suspense>
 </template>
