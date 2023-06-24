@@ -7,7 +7,7 @@ const movies = ref([]);
 
 function updateMovieRating(movieId, newRating) {
     const movie = movies.value.find(({ id }) => movieId === id);
-    if (!movie || movie.rating === newRating) return;
+    if (!movie) return;
     movie.rating = newRating;
 }
 
