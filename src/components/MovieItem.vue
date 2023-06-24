@@ -70,9 +70,12 @@ onMounted(fillRating);
                                 hoveredRating > 0
                                     ? star <= hoveredRating
                                     : star <= movie.rating,
+                            '--disabled': star === movie.rating,
                         }"
                         @mouseover="hoveredRating = star"
-                        @click="$emit('updateRating', star)"
+                        @click="
+                            star !== movie.rating && $emit('updateRating', star)
+                        "
                     />
                 </div>
             </div>

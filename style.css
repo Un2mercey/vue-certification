@@ -69,3 +69,7 @@
 .--starred {
     @apply text-yellow-500;
 }
+
+.--disabled {
+    @apply cursor-not-allowed;
+}
