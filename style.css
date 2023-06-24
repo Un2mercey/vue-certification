@@ -1,3 +1,63 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#app {
+    @apply max-w-full flex items-center justify-center h-screen mx-auto;
+}
+
+.movie-list {
+    @apply flex items-center justify-center space-x-4;
+}
+
+.movie-item {
+    @apply w-96 h-auto bg-white rounded-md flex flex-col items-center justify-start overflow-hidden shadow-2xl;
+}
+
+.movie-item-image-wrapper {
+    @apply h-[520px] overflow-hidden w-full relative;
+}
+
+.movie-item-image {
+    @apply object-cover object-center h-[600px];
+}
+
+.movie-item-content-wrapper {
+    @apply h-56 p-4 flex flex-col items-start justify-start w-full;
+}
+
+.movie-item-title-wrapper {
+    @apply h-16 shrink-0 w-full;
+}
+
+.movie-item-title {
+    @apply text-2xl;
+}
+
+.movie-item-description-wrapper {
+    @apply h-24 overflow-auto flex-1;
+}
+
+.movie-item-description {
+    @apply text-sm;
+}
+
+.movie-item-genres-wrapper {
+    @apply flex items-center justify-start space-x-1;
+}
+
+.movie-item-genre-tag {
+    @apply text-xs bg-indigo-500 text-white py-0.5 px-2 rounded-full;
+}
+
+.movie-item-rating-wrapper {
+    @apply w-full flex items-center justify-start h-8 shrink-0;
+}
+
+.movie-item-rating-text {
+    @apply text-xs mr-2 leading-7;
+}
+
+.movie-item-star-icon {
+    @apply h-5 w-5 text-yellow-500;
+}
