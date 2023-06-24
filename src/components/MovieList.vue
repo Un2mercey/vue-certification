@@ -1,8 +1,16 @@
 <script setup>
+import { toRefs } from 'vue';
 import MovieItem from '@/components/MovieItem.vue';
 
-defineProps(['movies']);
+const props = defineProps({
+    movies: {
+        type: Array,
+        default: [],
+    },
+});
 defineEmits(['updateRating']);
+
+const { movies } = toRefs(props);
 </script>
 
 <template>

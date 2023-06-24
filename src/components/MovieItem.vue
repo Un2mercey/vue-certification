@@ -1,11 +1,27 @@
 <script setup>
 import { StarIcon } from '@heroicons/vue/24/solid';
-import { ref } from 'vue';
+import { onMounted, ref, toRefs } from 'vue';
 
-defineProps(['movie']);
+const props = defineProps({
+    movie: {
+        type: Object,
+    },
+});
 defineEmits(['updateRating']);
 
+const { movie } = toRefs(props);
+
 const hoveredRating = ref(0);
+
+function fillRating() {
+    for (let i = 1; i <= movie.value.rating; i++) {
+        setTimeout(() => {
+            hoveredRating.value = i;
+        }, i * 200);
+    }
+}
+
+onMounted(fillRating);
 </script>
 
 <template>
