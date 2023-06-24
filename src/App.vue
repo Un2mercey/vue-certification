@@ -1,5 +1,6 @@
 <script setup>
-import { items } from "./movies.json";
+import { items } from './movies.json';
+
 /*
  This is an Icon that you can use to represent the stars if you like
  otherwise you could just use a simple ⭐️ emoji, or * character.
@@ -8,6 +9,6 @@ import { items } from "./movies.json";
 </script>
 
 <template>
-  <!-- This is where your template goes	-->
-  <div></div>
+    <!-- This is where your template goes	-->
+    <div></div>
 </template>
