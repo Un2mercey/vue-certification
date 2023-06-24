@@ -18,6 +18,22 @@
     @apply h-[520px] overflow-hidden w-full relative;
 }
 
+.movie-item-top-rating-wrapper {
+    @apply absolute top-1 right-1 flex justify-center items-center;
+}
+
+.movie-item-top-rating-icon {
+    @apply h-16 w-16;
+}
+
+.movie-item-top-rating-text {
+    @apply absolute font-bold text-xl text-gray-400;
+}
+
+.--rated {
+    @apply text-yellow-800;
+}
+
 .movie-item-image {
     @apply object-cover object-center h-[600px];
 }
@@ -63,7 +79,7 @@
 }
 
 .movie-item-star-icon {
-    @apply h-5 w-5 text-stone-500 cursor-pointer;
+    @apply h-5 w-5 text-gray-500 cursor-pointer;
 }
 
 .--starred {
