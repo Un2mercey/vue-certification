@@ -5,6 +5,12 @@ import { items } from './mocks/movies.json';
 
 const movies = ref([]);
 
+function updateMovieRating(movieId, newRating) {
+    const movie = movies.value.find(({ id }) => movieId === id);
+    if (!movie || movie.rating === newRating) return;
+    movie.rating = newRating;
+}
+
 onBeforeMount(async () => {
     const imagesToLoad = items.map(({ image }) => {
         return new Promise((resolve, reject) => {
@@ -26,6 +32,9 @@ onBeforeMount(async () => {
 
 <template>
     <Suspense>
-        <MovieList :movies="movies" />
+        <MovieList
+            :movies="movies"
+            @update-rating="updateMovieRating"
+        />
     </Suspense>
 </template>
