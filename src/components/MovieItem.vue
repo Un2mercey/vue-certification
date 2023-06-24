@@ -1,29 +1,31 @@
 <script setup>
 import { StarIcon } from '@heroicons/vue/24/solid';
-import { toRefs } from 'vue';
+import { ref } from 'vue';
 
-const props = defineProps(['movie']);
-const { id, name, description, image, rating, genres } = toRefs(props.movie);
+defineProps(['movie']);
+defineEmits(['updateRating']);
+
+const hoveredRating = ref(0);
 </script>
 
 <template>
     <div class="movie-item">
         <div class="movie-item-image-wrapper">
             <img
-                :src="image"
-                :alt="`The poster of the \`${name}\` movie`"
+                :src="movie.image"
+                :alt="`The poster of the \`${movie.name}\` movie`"
                 class="movie-item-image"
             />
         </div>
         <div class="movie-item-content-wrapper">
             <div class="movie-item-title-wrapper">
                 <h3 class="movie-item-title">
-                    {{ name }}
+                    {{ movie.name }}
                 </h3>
                 <div class="movie-item-genres-wrapper">
                     <span
-                        v-for="genre in genres"
-                        :key="`${id}-${genre}`"
+                        v-for="genre in movie.genres"
+                        :key="`${movie.id}-${genre}`"
                         class="movie-item-genre-tag"
                     >
                         {{ genre }}
@@ -32,18 +34,31 @@ const { id, name, description, image, rating, genres } = toRefs(props.movie);
             </div>
             <div class="movie-item-description-wrapper">
                 <p class="movie-item-description">
-                    {{ description }}
+                    {{ movie.description }}
                 </p>
             </div>
             <div class="movie-item-rating-wrapper">
                 <span class="movie-item-rating-text">
-                    Rating: ({{ rating }}/5)
+                    Rating: ({{ movie.rating }}/5)
                 </span>
-                <StarIcon
-                    v-for="star in rating"
-                    :key="`${id}-star-${star}`"
-                    class="movie-item-star-icon"
-                />
+                <div
+                    class="movie-item-stars-wrapper"
+                    @mouseleave="hoveredRating = 0"
+                >
+                    <StarIcon
+                        v-for="star in 5"
+                        :key="`${movie.id}-star-${star}`"
+                        class="movie-item-star-icon"
+                        :class="{
+                            '--starred':
+                                hoveredRating > 0
+                                    ? star <= hoveredRating
+                                    : star <= movie.rating,
+                        }"
+                        @mouseover="hoveredRating = star"
+                        @click="$emit('updateRating', star)"
+                    />
+                </div>
             </div>
         </div>
     </div>

@@ -58,6 +58,14 @@
     @apply text-xs mr-2 leading-7;
 }
 
+.movie-item-stars-wrapper {
+    @apply flex;
+}
+
 .movie-item-star-icon {
-    @apply h-5 w-5 text-yellow-500;
+    @apply h-5 w-5 text-stone-500 cursor-pointer;
+}
+
+.--starred {
+    @apply text-yellow-500;
 }
