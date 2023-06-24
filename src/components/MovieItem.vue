@@ -32,6 +32,21 @@ onMounted(fillRating);
                 :alt="`The poster of the \`${movie.name}\` movie`"
                 class="movie-item-image"
             />
+            <div class="movie-item-top-rating-wrapper">
+                <StarIcon
+                    id="top-rating"
+                    :class="[
+                        'movie-item-top-rating-icon',
+                        movie.rating ? 'text-yellow-500' : 'text-gray-500',
+                    ]"
+                />
+                <span
+                    class="movie-item-top-rating-text"
+                    :class="{ '--rated': movie.rating }"
+                >
+                    {{ movie.rating || '-' }}
+                </span>
+            </div>
         </div>
         <div class="movie-item-content-wrapper">
             <div class="movie-item-title-wrapper">
