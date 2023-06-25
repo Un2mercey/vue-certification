@@ -10,7 +10,7 @@ const props = defineProps({
     },
     movies: {
         type: Array,
-        required: true,
+        default: () => [],
     },
 });
 const emit = defineEmits(['update:isLoading', 'update:movies']);

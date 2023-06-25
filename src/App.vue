@@ -1,6 +1,6 @@
 <script setup>
+import CustomLoader from '@/ui/CustomLoader.vue';
 import { ref } from 'vue';
-import CustomLoader from '@/components/CustomLoader.vue';
 import MovieList from '@/components/MovieList.vue';
 import { items } from './mocks/movies.json';
 

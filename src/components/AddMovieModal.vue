@@ -1,7 +1,8 @@
 <script setup>
+import CustomDialog from '@/ui/CustomDialog.vue';
 import { PlusIcon } from '@heroicons/vue/24/solid';
 import { ref } from 'vue';
-import CustomDialog from '@/components/CustomDialog.vue';
+import AddMovieForm from '@/components/AddMovieForm.vue';
 
 const isOpened = ref(false);
 
@@ -30,15 +31,21 @@ function save() {
             </button>
         </template>
         <template #content>
-            <div>C1</div>
-            <div>C2</div>
-            <div>C3</div>
-            <div>C4</div>
-            <div>C5</div>
+            <AddMovieForm />
         </template>
         <template #actions>
-            <button @click="cancel">Cancel</button>
-            <button @click="save">Save</button>
+            <button
+                class="dialog-cancel-btn"
+                @click="cancel"
+            >
+                <span class="btn-content">cancel</span>
+            </button>
+            <button
+                class="dialog-confirm-btn"
+                @click="save"
+            >
+                <span class="btn-content">save</span>
+            </button>
         </template>
     </CustomDialog>
 </template>

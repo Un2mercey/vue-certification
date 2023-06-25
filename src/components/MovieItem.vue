@@ -5,7 +5,7 @@ import { computed, onMounted, ref } from 'vue';
 const props = defineProps({
     movie: {
         type: Object,
-        required: true,
+        default: () => ({}),
     },
 });
 const emit = defineEmits(['update:rating']);
@@ -43,10 +43,7 @@ onMounted(fillRating);
             <div class="movie-item-top-rating-wrapper">
                 <StarIcon
                     id="top-rating"
-                    :class="[
-                        'movie-item-top-rating-icon',
-                        rating ? 'text-yellow-500' : 'text-gray-500',
-                    ]"
+                    :class="['movie-item-top-rating-icon', rating ? 'text-yellow-500' : 'text-gray-500']"
                 />
                 <span
                     class="movie-item-top-rating-text"
@@ -77,9 +74,7 @@ onMounted(fillRating);
                 </p>
             </div>
             <div class="movie-item-rating-wrapper">
-                <span class="movie-item-rating-text">
-                    Rating: ({{ rating }}/5)
-                </span>
+                <span class="movie-item-rating-text"> Rating: ({{ rating }}/5) </span>
                 <div
                     class="movie-item-stars-wrapper"
                     @mouseleave="hoveredRating = 0"
@@ -89,10 +84,7 @@ onMounted(fillRating);
                         :key="`${movie.id}-star-${star}`"
                         class="movie-item-star-icon"
                         :class="{
-                            '--starred':
-                                hoveredRating > 0
-                                    ? star <= hoveredRating
-                                    : star <= rating,
+                            '--starred': hoveredRating > 0 ? star <= hoveredRating : star <= rating,
                             '--disabled': star === rating,
                         }"
                         @mouseover="hoveredRating = star"
