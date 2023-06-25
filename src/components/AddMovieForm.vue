@@ -1,4 +1,5 @@
 <script setup>
+import CustomCheckbox from '@/ui/CustomCheckbox.vue';
 import CustomInput from '@/ui/CustomInput.vue';
 import CustomSelect from '@/ui/CustomSelect.vue';
 import FormControl from '@/ui/FormControl.vue';
@@ -8,7 +9,8 @@ const form = reactive({
     name: '',
     description: '',
     image: '',
-    genre: [],
+    genres: [],
+    inTheaters: false,
 });
 const errors = reactive({
     name: {
@@ -65,25 +67,20 @@ function validate() {
             v-model="form.image"
             v-model:has-error="errors.image.hasError"
             label="image"
+            placeholder-text="Give me a link"
             :validation-fn="errors.image.validatorFn"
             :error-messages="errors.image.errorMessages"
         />
-        <FormControl
-            key="genres"
-            label="genres"
-        >
+        <FormControl label="genres">
             <CustomSelect
-                v-model="form.genre"
+                v-model="form.genres"
                 :items="genres"
             />
         </FormControl>
-        <div>
-            <input
-                id="checkbox"
-                type="checkbox"
-            />
-            <label for="checkbox">In theaters</label>
-        </div>
+        <CustomCheckbox
+            v-model="form.inTheaters"
+            label="In theaters"
+        />
     </form>
 </template>
 

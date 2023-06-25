@@ -204,14 +204,14 @@ button span.btn-content svg {
     @apply translate-y-[20px] opacity-0;
 }
 
-/* fade-medium transition */
-.fade-medium-enter-from,
-.fade-medium-leave-to {
+/* fade-fast transition */
+.fade-fast-enter-from,
+.fade-fast-leave-to {
     @apply opacity-0;
 }
-.fade-medium-enter-active,
-.fade-medium-leave-active {
-    @apply transition-opacity duration-300 ease-in-out;
+.fade-fast-enter-active,
+.fade-fast-leave-active {
+    @apply transition-opacity duration-150 ease-in-out;
 }
 
 /* list transition-group */

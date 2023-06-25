@@ -135,7 +135,7 @@ const inputClassNames = computed(() => ({
 }
 
 .input-wrapper {
-    @apply flex w-full;
+    @apply flex w-full items-center relative;
 }
 .input,
 .textarea {
@@ -150,6 +150,10 @@ const inputClassNames = computed(() => ({
 .input::selection,
 .textarea::selection {
     @apply bg-cyan-900;
+}
+
+.placeholder {
+    @apply absolute pl-3 text-gray-500;
 }
 
 input:focus,

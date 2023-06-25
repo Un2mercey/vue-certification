@@ -43,6 +43,7 @@ async function loadImages() {
         emit('update:isLoading', false);
     } catch {
         console.error("Some of images hasn't been loaded!");
+        emit('update:isLoading', false);
     }
 }
 
