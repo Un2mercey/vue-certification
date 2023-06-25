@@ -6,6 +6,14 @@
     @apply max-w-full flex items-center justify-center h-screen mx-auto;
 }
 
+.movie-list-wrapper {
+    @apply flex flex-col gap-2;
+}
+
+.add-movie-modal-btn-wrapper {
+    @apply ml-auto;
+}
+
 .movie-list {
     @apply flex items-center justify-center space-x-4;
 }
@@ -88,4 +96,77 @@
 
 .--disabled {
     @apply cursor-not-allowed;
+}
+
+#overlay-container {
+    @apply absolute left-0 top-0 pointer-events-none contents;
+    contain: layout;
+}
+
+.overlay {
+    @apply fixed pointer-events-none top-0 right-0 bottom-0 left-0 flex items-center justify-center m-auto z-[2400] backdrop-blur-sm;
+}
+
+.overlay::before {
+    @apply absolute top-0 right-0 bottom-0 left-0 opacity-50;
+    content: '';
+}
+
+.overlay-scrim {
+    @apply pointer-events-auto top-0 right-0 bottom-0 left-0 opacity-30 fixed;
+}
+
+.overlay-content {
+    @apply pointer-events-auto flex p-8 rounded-2xl;
+    background-color: rgba(16, 24, 39, 0.92);
+}
+
+.dialog-activator {
+}
+
+.dialog {
+    @apply flex flex-col z-0 w-[50vw];
+}
+
+.dialog-header {
+    @apply flex justify-between mb-3;
+}
+
+.dialog-header-title {
+    @apply text-3xl text-yellow-600 overflow-hidden whitespace-nowrap;
+}
+
+.add-movie-btn {
+    @apply bg-cyan-500;
+    filter: drop-shadow(0px 0px 10px rgba(6, 182, 212, 0.25));
+}
+
+button {
+    @apply h-auto px-6 py-2 rounded-xl;
+    transition: 0.2s ease;
+}
+
+button:active {
+    transform: scale(0.9);
+}
+
+button span.btn-content {
+    @apply flex items-center justify-center gap-2 min-w-[auto] capitalize whitespace-nowrap;
+    transition: transform, opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button span.btn-content svg {
+    @apply w-6 h-6;
+}
+
+.dialog-close-btn {
+    @apply p-0;
+}
+
+.dialog-close-btn svg {
+    @apply text-yellow-500;
+}
+
+.dialog-close-btn:hover svg {
+    @apply text-red-500;
 }

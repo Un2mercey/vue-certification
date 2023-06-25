@@ -1,20 +1,28 @@
 <script setup>
 import { StarIcon } from '@heroicons/vue/24/solid';
-import { onMounted, ref, toRefs } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 const props = defineProps({
     movie: {
         type: Object,
+        required: true,
     },
 });
-defineEmits(['updateRating']);
-
-const { movie } = toRefs(props);
+const emit = defineEmits(['update:rating']);
+const movie = computed(() => props.movie);
+const rating = computed({
+    get() {
+        return movie.value.rating;
+    },
+    set(rating) {
+        emit('update:rating', rating);
+    },
+});
 
 const hoveredRating = ref(0);
 
 function fillRating() {
-    for (let i = 1; i <= movie.value.rating; i++) {
+    for (let i = 1; i <= rating.value; i++) {
         setTimeout(() => {
             hoveredRating.value = i;
         }, i * 200);
@@ -37,14 +45,14 @@ onMounted(fillRating);
                     id="top-rating"
                     :class="[
                         'movie-item-top-rating-icon',
-                        movie.rating ? 'text-yellow-500' : 'text-gray-500',
+                        rating ? 'text-yellow-500' : 'text-gray-500',
                     ]"
                 />
                 <span
                     class="movie-item-top-rating-text"
-                    :class="{ '--rated': movie.rating }"
+                    :class="{ '--rated': rating }"
                 >
-                    {{ movie.rating || '-' }}
+                    {{ rating || '-' }}
                 </span>
             </div>
         </div>
@@ -70,7 +78,7 @@ onMounted(fillRating);
             </div>
             <div class="movie-item-rating-wrapper">
                 <span class="movie-item-rating-text">
-                    Rating: ({{ movie.rating }}/5)
+                    Rating: ({{ rating }}/5)
                 </span>
                 <div
                     class="movie-item-stars-wrapper"
@@ -84,13 +92,11 @@ onMounted(fillRating);
                             '--starred':
                                 hoveredRating > 0
                                     ? star <= hoveredRating
-                                    : star <= movie.rating,
-                            '--disabled': star === movie.rating,
+                                    : star <= rating,
+                            '--disabled': star === rating,
                         }"
                         @mouseover="hoveredRating = star"
-                        @click="
-                            star !== movie.rating && $emit('updateRating', star)
-                        "
+                        @click="star !== rating && (rating = star)"
                     />
                 </div>
             </div>
