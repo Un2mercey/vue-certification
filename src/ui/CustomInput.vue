@@ -47,10 +47,10 @@ const modelValue = computed({
         emit('update:modelValue', value);
     },
 });
-
 const inputId = ref(`${props.label || 'input'}-${new Date().getTime()}`);
 const isFocused = ref(false);
 const isPlaceholderVisible = computed(() => props.placeholderText && !(isFocused.value || modelValue.value.length));
+const isValidClassName = computed(() => props.validationFn && !props.hasError && modelValue.value.length);
 const inputClassNames = computed(() => ({
     'placeholder-visible': isPlaceholderVisible,
     disabled: props.isDisabled,
@@ -67,6 +67,7 @@ const inputClassNames = computed(() => ({
                 v-if="label"
                 :for="inputId"
                 class="label"
+                :class="{ valid: isValidClassName }"
             >
                 {{ label }}
             </label>
@@ -81,6 +82,7 @@ const inputClassNames = computed(() => ({
                     :disabled="props.isDisabled"
                     type="text"
                     class="input"
+                    :class="{ valid: isValidClassName }"
                     @input="modelValue = $event.target.value"
                     @focus="isFocused = true"
                     @blur="isFocused = false"
@@ -92,6 +94,7 @@ const inputClassNames = computed(() => ({
                     :disabled="props.isDisabled"
                     type="text"
                     class="textarea"
+                    :class="{ valid: isValidClassName }"
                     @input="modelValue = $event.target.value"
                     @focus="isFocused = true"
                     @blur="isFocused = false"
@@ -160,6 +163,15 @@ input:focus,
 textarea:focus-visible {
     border-color: rgb(234 179 8);
     outline: none;
+}
+
+.input.valid,
+.textarea.valid {
+    @apply border-green-400 text-green-400;
+}
+
+.label.valid {
+    @apply text-green-400;
 }
 
 .error-messages {

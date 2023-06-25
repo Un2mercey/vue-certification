@@ -95,3 +95,86 @@ onMounted(fillRating);
         </div>
     </div>
 </template>
+
+<style scoped>
+.movie-item {
+    @apply w-96 h-auto bg-white rounded-md flex flex-col
+        items-center justify-start overflow-hidden shadow-2xl;
+}
+
+.movie-item-image-wrapper {
+    @apply h-[520px] overflow-hidden w-full relative;
+}
+
+.movie-item-top-rating-wrapper {
+    @apply absolute top-1 right-1 flex justify-center items-center;
+}
+
+.movie-item-top-rating-icon {
+    @apply h-16 w-16;
+}
+
+.movie-item-top-rating-text {
+    @apply absolute font-bold text-xl text-gray-400;
+}
+
+.--rated {
+    @apply text-yellow-800;
+}
+
+.movie-item-image {
+    @apply object-cover object-center h-[600px];
+}
+
+.movie-item-content-wrapper {
+    @apply h-56 p-4 flex flex-col items-start justify-start w-full;
+}
+
+.movie-item-title-wrapper {
+    @apply h-16 shrink-0 w-full;
+}
+
+.movie-item-title {
+    @apply text-2xl;
+}
+
+.movie-item-description-wrapper {
+    @apply h-24 overflow-auto flex-1;
+}
+
+.movie-item-description {
+    @apply text-sm;
+}
+
+.movie-item-genres-wrapper {
+    @apply flex items-center justify-start space-x-1;
+}
+
+.movie-item-genre-tag {
+    @apply text-xs bg-indigo-500 text-white py-0.5 px-2 rounded-full;
+}
+
+.movie-item-rating-wrapper {
+    @apply w-full flex items-center justify-start h-8 shrink-0;
+}
+
+.movie-item-rating-text {
+    @apply text-xs mr-2 leading-7;
+}
+
+.movie-item-stars-wrapper {
+    @apply flex;
+}
+
+.movie-item-star-icon {
+    @apply h-5 w-5 text-gray-500 cursor-pointer;
+}
+
+.--starred {
+    @apply text-yellow-500;
+}
+
+.--disabled {
+    @apply cursor-not-allowed;
+}
+</style>

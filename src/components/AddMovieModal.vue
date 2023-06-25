@@ -49,3 +49,20 @@ function save() {
         </template>
     </CustomDialog>
 </template>
+
+<style scoped>
+.dialog-cancel-btn {
+    @apply bg-red-500 hover:bg-red-300 active:bg-red-300;
+    filter: drop-shadow(0px 0px 10px rgba(239, 68, 68, 0.25));
+}
+
+.dialog-confirm-btn {
+    @apply bg-green-500 hover:bg-green-300 active:bg-green-300;
+    filter: drop-shadow(0px 0px 10px rgba(34, 197, 94, 0.25));
+}
+
+.add-movie-btn {
+    @apply bg-cyan-500;
+    filter: drop-shadow(0px 0px 10px rgba(6, 182, 212, 0.25));
+}
+</style>

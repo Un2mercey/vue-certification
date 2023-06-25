@@ -70,3 +70,36 @@ function close() {
         </div>
     </Teleport>
 </template>
+
+<style scoped>
+.dialog-activator {
+}
+
+.dialog {
+    @apply flex flex-col z-0 w-[36vw] min-h-[45vh] gap-8;
+}
+
+.dialog-header {
+    @apply flex justify-between;
+}
+
+.dialog-header-title {
+    @apply text-3xl text-yellow-600 overflow-hidden whitespace-nowrap;
+}
+
+.dialog-content {
+    @apply flex flex-col gap-4;
+}
+
+.dialog-actions {
+    @apply flex items-center justify-between mt-auto;
+}
+
+.dialog-close-btn {
+    @apply p-0;
+}
+
+.dialog-close-btn span.btn-content {
+    @apply text-yellow-500 hover:text-red-500 active:text-red-500;
+}
+</style>

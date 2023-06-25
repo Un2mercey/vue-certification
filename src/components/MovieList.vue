@@ -66,3 +66,17 @@ onBeforeUnmount(stopWatch);
         </div>
     </section>
 </template>
+
+<style scoped>
+.movie-list-wrapper {
+    @apply flex flex-col gap-2;
+}
+
+.add-movie-modal-btn-wrapper {
+    @apply ml-auto;
+}
+
+.movie-list {
+    @apply flex items-center justify-center space-x-4;
+}
+</style>
