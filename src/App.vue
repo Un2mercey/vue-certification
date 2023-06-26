@@ -1,40 +1,17 @@
 <script setup>
-import { onBeforeMount, ref } from 'vue';
+import CustomLoader from '@/ui/CustomLoader.vue';
+import { ref } from 'vue';
 import MovieList from '@/components/MovieList.vue';
 import { items } from './mocks/movies.json';
 
-const movies = ref([]);
-
-function updateMovieRating(movieId, newRating) {
-    const movie = movies.value.find(({ id }) => movieId === id);
-    if (!movie) return;
-    movie.rating = newRating;
-}
-
-onBeforeMount(async () => {
-    const imagesToLoad = items.map(({ image }) => {
-        return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.src = image;
-            img.onload = resolve;
-            img.onerror = reject;
-        });
-    });
-
-    try {
-        await Promise.all(imagesToLoad);
-        movies.value = [...items];
-    } catch {
-        console.error("Some of images hasn't been loaded!");
-    }
-});
+const movies = ref(items);
+const isLoading = ref(false);
 </script>
 
 <template>
-    <Suspense>
-        <MovieList
-            :movies="movies"
-            @update-rating="updateMovieRating"
-        />
-    </Suspense>
+    <CustomLoader v-if="isLoading" />
+    <MovieList
+        v-model:is-loading="isLoading"
+        v-model:movies="movies"
+    />
 </template>

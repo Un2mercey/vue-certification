@@ -6,86 +6,129 @@
     @apply max-w-full flex items-center justify-center h-screen mx-auto;
 }
 
-.movie-list {
-    @apply flex items-center justify-center space-x-4;
+#overlay-container {
+    @apply absolute left-0 top-0 pointer-events-none contents;
+    contain: layout;
 }
 
-.movie-item {
-    @apply w-96 h-auto bg-white rounded-md flex flex-col items-center justify-start overflow-hidden shadow-2xl;
+.scrollbar-thin {
+    scrollbar-color: #e4e5e8 transparent;
+    scrollbar-width: thin;
+}
+.scrollbar-thin::-webkit-scrollbar {
+    width: 14px;
+    cursor: pointer;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    border: 5px solid transparent;
+    background-clip: content-box;
+    background-color: rgb(27, 41, 66);
+    cursor: pointer;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.scrollbar-thin::-webkit-scrollbar-track-piece {
+    background-color: transparent;
 }
 
-.movie-item-image-wrapper {
-    @apply h-[520px] overflow-hidden w-full relative;
+.overlay {
+    @apply fixed pointer-events-none top-0 right-0 bottom-0 left-0 flex items-center justify-center m-auto z-[2400] backdrop-blur-sm;
 }
 
-.movie-item-top-rating-wrapper {
-    @apply absolute top-1 right-1 flex justify-center items-center;
+.overlay::before {
+    @apply absolute top-0 right-0 bottom-0 left-0 opacity-50;
+    content: '';
 }
 
-.movie-item-top-rating-icon {
-    @apply h-16 w-16;
+.overlay-scrim {
+    @apply pointer-events-auto top-0 right-0 bottom-0 left-0 opacity-30 fixed;
 }
 
-.movie-item-top-rating-text {
-    @apply absolute font-bold text-xl text-gray-400;
+.overlay-content {
+    @apply pointer-events-auto flex p-8 rounded-2xl;
+    background-color: rgba(16, 24, 39, 0.92);
 }
 
-.--rated {
-    @apply text-yellow-800;
+.dialog-cancel-btn {
+    @apply bg-red-500 hover:bg-red-300 active:bg-red-300;
+    filter: drop-shadow(0px 0px 10px rgba(239, 68, 68, 0.25));
 }
 
-.movie-item-image {
-    @apply object-cover object-center h-[600px];
+.dialog-confirm-btn {
+    @apply bg-green-500 hover:bg-green-300 active:bg-green-300;
+    filter: drop-shadow(0px 0px 10px rgba(34, 197, 94, 0.25));
 }
 
-.movie-item-content-wrapper {
-    @apply h-56 p-4 flex flex-col items-start justify-start w-full;
+button {
+    @apply h-auto px-6 py-2 rounded-xl;
+    transition: 0.2s ease;
 }
 
-.movie-item-title-wrapper {
-    @apply h-16 shrink-0 w-full;
+button:active {
+    transform: scale(0.9);
 }
 
-.movie-item-title {
-    @apply text-2xl;
+button span.btn-content {
+    @apply flex items-center justify-center gap-2 min-w-[auto] capitalize whitespace-nowrap;
+    transition: transform, opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    color: rgba(16, 24, 39);
 }
 
-.movie-item-description-wrapper {
-    @apply h-24 overflow-auto flex-1;
+button span.btn-content svg {
+    @apply w-6 h-6;
 }
 
-.movie-item-description {
-    @apply text-sm;
+button:disabled {
+    @apply cursor-not-allowed opacity-90 pointer-events-none !bg-gray-500 !filter-none;
 }
 
-.movie-item-genres-wrapper {
-    @apply flex items-center justify-start space-x-1;
+.error-messages {
+    @apply flex flex-col gap-1;
 }
 
-.movie-item-genre-tag {
-    @apply text-xs bg-indigo-500 text-white py-0.5 px-2 rounded-full;
+.error-message {
+    @apply text-sm text-red-500;
 }
 
-.movie-item-rating-wrapper {
-    @apply w-full flex items-center justify-start h-8 shrink-0;
+/* slide-fade-bottom transition */
+.slide-fade-bottom-enter-active {
+    @apply transition-all duration-150 ease-in-out delay-150;
+}
+.slide-fade-bottom-leave-active {
+    @apply transition-all duration-150 ease-in-out;
+}
+.slide-fade-bottom-enter-to {
+    @apply translate-y-0 opacity-100;
+}
+.slide-fade-bottom-enter {
+    @apply translate-y-[-20px] opacity-0;
+}
+.slide-fade-bottom-enter-from,
+.slide-fade-bottom-leave-to {
+    @apply translate-y-[20px] opacity-0;
 }
 
-.movie-item-rating-text {
-    @apply text-xs mr-2 leading-7;
+/* fade-fast transition */
+.fade-fast-enter-from,
+.fade-fast-leave-to {
+    @apply opacity-0;
+}
+.fade-fast-enter-active,
+.fade-fast-leave-active {
+    @apply transition-opacity duration-150 ease-in-out;
 }
 
-.movie-item-stars-wrapper {
-    @apply flex;
+/* list transition-group */
+.list-move,
+.list-enter-active,
+.list-leave-active {
+    transition: all 0.5s ease;
 }
-
-.movie-item-star-icon {
-    @apply h-5 w-5 text-gray-500 cursor-pointer;
-}
-
-.--starred {
-    @apply text-yellow-500;
-}
-
-.--disabled {
-    @apply cursor-not-allowed;
+.list-enter-from,
+.list-leave-to {
+    @apply opacity-0 translate-x-[30px];
 }

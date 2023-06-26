@@ -1,20 +1,28 @@
 <script setup>
 import { StarIcon } from '@heroicons/vue/24/solid';
-import { onMounted, ref, toRefs } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 const props = defineProps({
     movie: {
         type: Object,
+        default: () => ({}),
     },
 });
-defineEmits(['updateRating']);
-
-const { movie } = toRefs(props);
+const emit = defineEmits(['update:rating']);
+const movie = computed(() => props.movie);
+const rating = computed({
+    get() {
+        return movie.value.rating;
+    },
+    set(rating) {
+        emit('update:rating', rating);
+    },
+});
 
 const hoveredRating = ref(0);
 
 function fillRating() {
-    for (let i = 1; i <= movie.value.rating; i++) {
+    for (let i = 1; i <= rating.value; i++) {
         setTimeout(() => {
             hoveredRating.value = i;
         }, i * 200);
@@ -35,16 +43,13 @@ onMounted(fillRating);
             <div class="movie-item-top-rating-wrapper">
                 <StarIcon
                     id="top-rating"
-                    :class="[
-                        'movie-item-top-rating-icon',
-                        movie.rating ? 'text-yellow-500' : 'text-gray-500',
-                    ]"
+                    :class="['movie-item-top-rating-icon', rating ? 'text-yellow-500' : 'text-gray-500']"
                 />
                 <span
                     class="movie-item-top-rating-text"
-                    :class="{ '--rated': movie.rating }"
+                    :class="{ '--rated': rating }"
                 >
-                    {{ movie.rating || '-' }}
+                    {{ rating || '-' }}
                 </span>
             </div>
         </div>
@@ -69,9 +74,7 @@ onMounted(fillRating);
                 </p>
             </div>
             <div class="movie-item-rating-wrapper">
-                <span class="movie-item-rating-text">
-                    Rating: ({{ movie.rating }}/5)
-                </span>
+                <span class="movie-item-rating-text"> Rating: ({{ rating }}/5) </span>
                 <div
                     class="movie-item-stars-wrapper"
                     @mouseleave="hoveredRating = 0"
@@ -81,19 +84,97 @@ onMounted(fillRating);
                         :key="`${movie.id}-star-${star}`"
                         class="movie-item-star-icon"
                         :class="{
-                            '--starred':
-                                hoveredRating > 0
-                                    ? star <= hoveredRating
-                                    : star <= movie.rating,
-                            '--disabled': star === movie.rating,
+                            '--starred': hoveredRating > 0 ? star <= hoveredRating : star <= rating,
+                            '--disabled': star === rating,
                         }"
                         @mouseover="hoveredRating = star"
-                        @click="
-                            star !== movie.rating && $emit('updateRating', star)
-                        "
+                        @click="star !== rating && (rating = star)"
                     />
                 </div>
             </div>
         </div>
     </div>
 </template>
+
+<style scoped>
+.movie-item {
+    @apply w-96 shrink-0 h-auto bg-white rounded-md flex flex-col items-center
+        justify-start overflow-hidden shadow-2xl mr-8 mt-8;
+}
+
+.movie-item-image-wrapper {
+    @apply h-[520px] overflow-hidden w-full relative;
+}
+
+.movie-item-top-rating-wrapper {
+    @apply absolute top-1 right-1 flex justify-center items-center;
+}
+
+.movie-item-top-rating-icon {
+    @apply h-16 w-16;
+}
+
+.movie-item-top-rating-text {
+    @apply absolute font-bold text-xl text-gray-400;
+}
+
+.--rated {
+    @apply text-yellow-800;
+}
+
+.movie-item-image {
+    @apply object-cover object-center h-[600px];
+}
+
+.movie-item-content-wrapper {
+    @apply h-56 p-4 flex flex-col items-start justify-start w-full;
+}
+
+.movie-item-title-wrapper {
+    @apply h-16 shrink-0 w-full;
+}
+
+.movie-item-title {
+    @apply text-2xl;
+}
+
+.movie-item-description-wrapper {
+    @apply h-24 overflow-auto flex-1;
+}
+
+.movie-item-description {
+    @apply text-sm;
+}
+
+.movie-item-genres-wrapper {
+    @apply flex items-center justify-start space-x-1;
+}
+
+.movie-item-genre-tag {
+    @apply text-xs bg-indigo-500 text-white py-0.5 px-2 rounded-full;
+}
+
+.movie-item-rating-wrapper {
+    @apply w-full flex items-center justify-start h-8 shrink-0;
+}
+
+.movie-item-rating-text {
+    @apply text-xs mr-2 leading-7;
+}
+
+.movie-item-stars-wrapper {
+    @apply flex;
+}
+
+.movie-item-star-icon {
+    @apply h-5 w-5 text-gray-500 cursor-pointer;
+}
+
+.--starred {
+    @apply text-yellow-500;
+}
+
+.--disabled {
+    @apply cursor-not-allowed;
+}
+</style>
