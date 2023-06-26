@@ -87,7 +87,7 @@ onBeforeUnmount(stopWatch);
 }
 
 .movie-list-header {
-    @apply flex items-center justify-between w-full max-w-7xl;
+    @apply flex items-center justify-between w-full max-w-7xl px-8;
 }
 
 .movie-list-header-actions {
