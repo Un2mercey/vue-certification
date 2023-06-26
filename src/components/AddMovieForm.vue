@@ -130,7 +130,7 @@ function validate() {
         <div class="form-actions">
             <button
                 class="dialog-cancel-btn"
-                @click="close"
+                @click="props.closeFn"
             >
                 <span class="btn-content">cancel</span>
             </button>
