@@ -22,6 +22,10 @@ const movies = computed({
         emit('update:movies', value);
     },
 });
+const avgRating = computed(() => {
+    const sum = movies.value.reduce((acc, { rating }) => acc + rating, 0);
+    return (sum / movies.value.length).toFixed(1);
+});
 
 function updateMovieRating(index, newRating) {
     movies.value[index].rating = newRating;
@@ -65,6 +69,11 @@ onBeforeUnmount(stopWatch);
 <template>
     <section class="movie-list-wrapper">
         <div class="movie-list-header">
+            <div class="movie-list-header-title">
+                total movies: {{ movies.length }}
+                <span>/</span>
+                average rating: {{ avgRating }}
+            </div>
             <div class="spacer" />
             <div class="movie-list-header-actions">
                 <AddMovieModal @add:movie="addMovie" />
@@ -87,7 +96,11 @@ onBeforeUnmount(stopWatch);
 }
 
 .movie-list-header {
-    @apply flex items-center justify-between w-full max-w-7xl px-8;
+    @apply flex items-center justify-between w-full max-w-7xl pr-8;
+}
+
+.movie-list-header-title {
+    @apply text-white text-xl capitalize flex gap-8;
 }
 
 .movie-list-header-actions {
