@@ -5,7 +5,16 @@ import CustomSelect from '@/ui/CustomSelect.vue';
 import FormControl from '@/ui/FormControl.vue';
 import { computed, reactive } from 'vue';
 
-const emit = defineEmits(['submit']);
+const props = defineProps({
+    saveFn: {
+        type: Function,
+        default: () => {},
+    },
+    closeFn: {
+        type: Function,
+        default: () => {},
+    },
+});
 
 const form = reactive({
     name: '',
@@ -59,9 +68,8 @@ const isFormValid = computed(() => {
 });
 
 function validate() {
-    console.log('validate form');
     if (isFormValid.value) {
-        emit('submit', form);
+        props.saveFn(form);
         return;
     }
 
@@ -74,7 +82,10 @@ function validate() {
 </script>
 
 <template>
-    <form @submit.prevent="validate">
+    <form
+        id="add-movie-from"
+        @submit.prevent="validate"
+    >
         <CustomInput
             key="form-name"
             v-model="form.name"
@@ -116,15 +127,30 @@ function validate() {
             v-model="form.inTheaters"
             label="In theaters"
         />
-        <slot
-            name="actions"
-            :is-valid="isFormValid"
-        />
+        <div class="form-actions">
+            <button
+                class="dialog-cancel-btn"
+                @click="close"
+            >
+                <span class="btn-content">cancel</span>
+            </button>
+            <button
+                class="dialog-confirm-btn"
+                type="submit"
+                :disabled="!isFormValid"
+            >
+                <span class="btn-content">save</span>
+            </button>
+        </div>
     </form>
 </template>
 
 <style scoped>
 form {
     @apply flex flex-col gap-6;
+}
+
+.form-actions {
+    @apply flex items-center justify-between mt-auto;
 }
 </style>

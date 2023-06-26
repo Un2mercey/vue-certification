@@ -27,6 +27,17 @@ function updateMovieRating(index, newRating) {
     movies.value[index].rating = newRating;
 }
 
+function addMovie(movie) {
+    movies.value = [
+        ...movies.value,
+        {
+            ...movie,
+            id: movies.value.at(-1).id + 1,
+            rating: null,
+        },
+    ];
+}
+
 async function loadImages() {
     const imagesToLoad = movies.value.map(({ image }) => {
         return new Promise((resolve, reject) => {
@@ -53,10 +64,13 @@ onBeforeUnmount(stopWatch);
 
 <template>
     <section class="movie-list-wrapper">
-        <div class="add-movie-modal-btn-wrapper">
-            <AddMovieModal />
+        <div class="movie-list-header">
+            <div class="spacer" />
+            <div class="movie-list-header-actions">
+                <AddMovieModal @add:movie="addMovie" />
+            </div>
         </div>
-        <div class="movie-list">
+        <div class="movie-list scrollbar-thin">
             <MovieItem
                 v-for="(movie, index) in movies"
                 :key="movie.id"
@@ -72,11 +86,19 @@ onBeforeUnmount(stopWatch);
     @apply flex flex-col gap-2;
 }
 
-.add-movie-modal-btn-wrapper {
-    @apply ml-auto;
+.movie-list-header {
+    @apply flex items-center justify-between w-full max-w-7xl;
+}
+
+.movie-list-header-actions {
+    @apply flex items-center justify-between space-x-8;
 }
 
 .movie-list {
-    @apply flex items-center justify-center space-x-4;
+    @apply flex flex-wrap items-center justify-between max-w-7xl overflow-auto h-[860px];
+}
+
+.spacer {
+    @apply w-full flex-1;
 }
 </style>

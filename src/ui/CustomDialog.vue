@@ -60,7 +60,7 @@ function close() {
                         <slot name="content" />
                     </div>
                     <div
-                        v-if="$slots['dialog-actions']"
+                        v-if="$slots.actions"
                         class="dialog-actions"
                     >
                         <slot

@@ -98,8 +98,8 @@ onMounted(fillRating);
 
 <style scoped>
 .movie-item {
-    @apply w-96 h-auto bg-white rounded-md flex flex-col
-        items-center justify-start overflow-hidden shadow-2xl;
+    @apply w-96 shrink-0 h-auto bg-white rounded-md flex flex-col items-center
+        justify-start overflow-hidden shadow-2xl mr-8 mt-8;
 }
 
 .movie-item-image-wrapper {

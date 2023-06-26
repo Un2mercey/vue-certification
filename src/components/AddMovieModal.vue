@@ -4,15 +4,15 @@ import { PlusIcon } from '@heroicons/vue/24/solid';
 import { ref } from 'vue';
 import AddMovieForm from '@/components/AddMovieForm.vue';
 
+const emit = defineEmits(['add:movie']);
 const isOpened = ref(false);
 
 function close() {
     isOpened.value = false;
 }
 function save(form) {
-    //
-    console.log(form);
-    // close();
+    emit('add:movie', form);
+    close();
 }
 </script>
 
@@ -33,46 +33,17 @@ function save(form) {
             </button>
         </template>
         <template #content>
-            <AddMovieForm @submit="save">
-                <template #actions="{ isValid }">
-                    <div class="form-actions">
-                        <button
-                            class="dialog-cancel-btn"
-                            @click="close"
-                        >
-                            <span class="btn-content">cancel</span>
-                        </button>
-                        <button
-                            class="dialog-confirm-btn"
-                            type="submit"
-                            :disabled="!isValid"
-                        >
-                            <span class="btn-content">save</span>
-                        </button>
-                    </div>
-                </template>
-            </AddMovieForm>
+            <AddMovieForm
+                :save-fn="save"
+                :close-fn="close"
+            />
         </template>
     </CustomDialog>
 </template>
 
 <style scoped>
-.dialog-cancel-btn {
-    @apply bg-red-500 hover:bg-red-300 active:bg-red-300;
-    filter: drop-shadow(0px 0px 10px rgba(239, 68, 68, 0.25));
-}
-
-.dialog-confirm-btn {
-    @apply bg-green-500 hover:bg-green-300 active:bg-green-300;
-    filter: drop-shadow(0px 0px 10px rgba(34, 197, 94, 0.25));
-}
-
 .add-movie-btn {
-    @apply bg-cyan-500;
+    @apply bg-cyan-500 self-end justify-self-end;
     filter: drop-shadow(0px 0px 10px rgba(6, 182, 212, 0.25));
-}
-
-.form-actions {
-    @apply flex items-center justify-between mt-8;
 }
 </style>
