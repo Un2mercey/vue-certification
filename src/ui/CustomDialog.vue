@@ -59,7 +59,10 @@ function close() {
                     <div class="dialog-content">
                         <slot name="content" />
                     </div>
-                    <div class="dialog-actions">
+                    <div
+                        v-if="$slots['dialog-actions']"
+                        class="dialog-actions"
+                    >
                         <slot
                             name="actions"
                             :props="{ onClick: close }"

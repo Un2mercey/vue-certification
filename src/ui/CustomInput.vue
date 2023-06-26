@@ -35,9 +35,7 @@ const props = defineProps({
         default: () => [],
     },
 });
-
 const emit = defineEmits(['update:modelValue', 'update:hasError']);
-
 const modelValue = computed({
     get() {
         return props.modelValue;
@@ -172,14 +170,6 @@ textarea:focus-visible {
 
 .label.valid {
     @apply text-green-400;
-}
-
-.error-messages {
-    @apply flex flex-col gap-1;
-}
-
-.error-message {
-    @apply text-sm text-red-500;
 }
 
 .input-container-wrapper.error .label {

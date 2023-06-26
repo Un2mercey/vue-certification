@@ -3,7 +3,9 @@ import CustomCheckbox from '@/ui/CustomCheckbox.vue';
 import CustomInput from '@/ui/CustomInput.vue';
 import CustomSelect from '@/ui/CustomSelect.vue';
 import FormControl from '@/ui/FormControl.vue';
-import { reactive } from 'vue';
+import { computed, reactive } from 'vue';
+
+const emit = defineEmits(['submit']);
 
 const form = reactive({
     name: '',
@@ -23,8 +25,15 @@ const errors = reactive({
         errorMessages: ['The given URI is invalid'],
         validatorFn: validateImage,
     },
+    genres: {
+        hasError: false,
+        touched: false,
+        errorMessages: ['The field is required'],
+        validatorFn: (value) => !!value.length,
+    },
 });
 const genres = Object.freeze(['Drama', 'Crime', 'Action', 'Comedy', 'Biography', 'Thriller', 'Adventure']);
+
 function validateImage(src) {
     if (!src.length) return true;
     const img = new Image();
@@ -41,8 +50,26 @@ function validateImage(src) {
     });
 }
 
+const isFormValid = computed(() => {
+    return (
+        Object.keys(errors)
+            .map((key) => !errors[key].hasError && errors[key].validatorFn(form[key]))
+            .filter(Boolean).length === Object.keys(errors).length
+    );
+});
+
 function validate() {
-    console.log('validate');
+    console.log('validate form');
+    if (isFormValid.value) {
+        emit('submit', form);
+        return;
+    }
+
+    Object.keys(errors).forEach((key) => {
+        if (!errors[key].validatorFn(form[key])) {
+            errors[key].hasError = true;
+        }
+    });
 }
 </script>
 
@@ -71,15 +98,27 @@ function validate() {
             :validation-fn="errors.image.validatorFn"
             :error-messages="errors.image.errorMessages"
         />
-        <FormControl label="genres">
+        <FormControl
+            label="genres"
+            :has-error="errors.genres.hasError"
+            :touched="errors.genres.touched"
+            :error-messages="errors.genres.errorMessages"
+        >
             <CustomSelect
                 v-model="form.genres"
+                v-model:has-error="errors.genres.hasError"
+                v-model:touched="errors.genres.touched"
                 :items="genres"
+                :validation-fn="errors.genres.validatorFn"
             />
         </FormControl>
         <CustomCheckbox
             v-model="form.inTheaters"
             label="In theaters"
+        />
+        <slot
+            name="actions"
+            :is-valid="isFormValid"
         />
     </form>
 </template>

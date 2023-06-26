@@ -1,8 +1,20 @@
 <script setup>
-defineProps({
+const props = defineProps({
     label: {
         type: String,
         default: '',
+    },
+    hasError: {
+        type: Boolean,
+        default: false,
+    },
+    touched: {
+        type: Boolean,
+        default: false,
+    },
+    errorMessages: {
+        type: Array,
+        default: () => [],
     },
 });
 </script>
@@ -10,14 +22,29 @@ defineProps({
 <template>
     <fieldset class="form-control">
         <div
-            v-if="label"
+            v-if="props.label"
             class="form-control-label"
+            :class="{ valid: props.touched && !props.hasError, error: props.hasError }"
         >
-            {{ label }}
+            {{ props.label }}
         </div>
         <div class="form-control-content">
             <slot />
         </div>
+        <Transition name="slide-fade-bottom">
+            <ul
+                v-if="props.hasError"
+                class="error-messages"
+            >
+                <li
+                    v-for="message in props.errorMessages"
+                    :key="message"
+                    class="error-message"
+                >
+                    {{ message }}
+                </li>
+            </ul>
+        </Transition>
     </fieldset>
 </template>
 
@@ -32,5 +59,13 @@ defineProps({
 
 .form-control-content {
     @apply flex flex-1;
+}
+
+.form-control-label.valid {
+    @apply text-green-400;
+}
+
+.form-control-label.error {
+    @apply text-red-500;
 }
 </style>

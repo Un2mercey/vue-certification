@@ -18,15 +18,36 @@ const props = defineProps({
         type: [String, Number],
         default: '0',
     },
+    touched: {
+        type: Boolean,
+        default: false,
+    },
+    hasError: {
+        type: Boolean,
+        default: false,
+    },
+    validationFn: {
+        type: Function,
+        default: null,
+    },
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'update:hasError', 'update:touched']);
 const modelValue = computed({
     get() {
         return props.modelValue;
     },
     set(value) {
+        props.validationFn && emit('update:hasError', !props.validationFn(value));
         emit('update:modelValue', value);
+    },
+});
+const touched = computed({
+    get() {
+        return props.touched;
+    },
+    set(value) {
+        emit('update:touched', value);
     },
 });
 
@@ -37,6 +58,7 @@ const availableItems = computed(() => {
 });
 
 function selectItem(item) {
+    touched.value = true;
     modelValue.value = [...modelValue.value, item];
 }
 
@@ -75,7 +97,7 @@ onBeforeUnmount(stopWatch);
     <div
         ref="activator"
         class="activator"
-        :class="{ active: isOpened }"
+        :class="{ active: isOpened, error: hasError, valid: touched && !hasError }"
         @click="availableItems.length && (isOpened = true)"
     >
         <TransitionGroup name="list">
@@ -119,7 +141,10 @@ onBeforeUnmount(stopWatch);
 
 <style scoped>
 .activator {
-    @apply relative text-base box-border w-full p-2 gap-2.5 rounded-lg flex flex-row items-start flex-wrap hover:border-yellow-500 cursor-pointer min-h-[50px];
+    @apply relative text-base box-border w-full p-2 gap-2.5 rounded-lg flex
+        flex-row items-center flex-wrap hover:border-yellow-500 cursor-pointer
+        min-h-[50px];
+
     box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.15);
     border: 1px solid rgb(156 163 175);
     caret-color: rgb(234 179 8);
@@ -129,6 +154,14 @@ onBeforeUnmount(stopWatch);
 
 .activator.active {
     @apply border-yellow-500;
+}
+
+.activator.valid {
+    @apply border-green-400 text-green-400;
+}
+
+.activator.error {
+    @apply border-red-500 caret-red-500 text-red-500;
 }
 
 .overlay {
@@ -153,8 +186,7 @@ onBeforeUnmount(stopWatch);
 }
 
 .selected-item {
-    @apply flex px-4 py-1 items-center rounded-lg gap-2 hover:text-red-800;
-    background: rgb(202 138 4);
-    color: rgba(16, 24, 39);
+    @apply flex px-2 py-0.5 items-center rounded-full gap-2 text-white text-sm
+        bg-indigo-500 hover:bg-indigo-400;
 }
 </style>

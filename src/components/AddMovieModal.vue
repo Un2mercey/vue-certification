@@ -6,11 +6,13 @@ import AddMovieForm from '@/components/AddMovieForm.vue';
 
 const isOpened = ref(false);
 
-function cancel() {
+function close() {
     isOpened.value = false;
 }
-function save() {
-    isOpened.value = false;
+function save(form) {
+    //
+    console.log(form);
+    // close();
 }
 </script>
 
@@ -31,21 +33,25 @@ function save() {
             </button>
         </template>
         <template #content>
-            <AddMovieForm />
-        </template>
-        <template #actions>
-            <button
-                class="dialog-cancel-btn"
-                @click="cancel"
-            >
-                <span class="btn-content">cancel</span>
-            </button>
-            <button
-                class="dialog-confirm-btn"
-                @click="save"
-            >
-                <span class="btn-content">save</span>
-            </button>
+            <AddMovieForm @submit="save">
+                <template #actions="{ isValid }">
+                    <div class="form-actions">
+                        <button
+                            class="dialog-cancel-btn"
+                            @click="close"
+                        >
+                            <span class="btn-content">cancel</span>
+                        </button>
+                        <button
+                            class="dialog-confirm-btn"
+                            type="submit"
+                            :disabled="!isValid"
+                        >
+                            <span class="btn-content">save</span>
+                        </button>
+                    </div>
+                </template>
+            </AddMovieForm>
         </template>
     </CustomDialog>
 </template>
@@ -64,5 +70,9 @@ function save() {
 .add-movie-btn {
     @apply bg-cyan-500;
     filter: drop-shadow(0px 0px 10px rgba(6, 182, 212, 0.25));
+}
+
+.form-actions {
+    @apply flex items-center justify-between mt-8;
 }
 </style>
