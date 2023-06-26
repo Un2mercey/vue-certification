@@ -1,4 +1,5 @@
 <script setup>
+import { ChartBarIcon } from '@heroicons/vue/24/outline';
 import { computed, onBeforeUnmount, watchEffect } from 'vue';
 import AddMovieModal from '@/components/AddMovieModal.vue';
 import MovieItem from '@/components/MovieItem.vue';
@@ -29,6 +30,12 @@ const avgRating = computed(() => {
 
 function updateMovieRating(index, newRating) {
     movies.value[index].rating = newRating;
+}
+
+function removeRatings() {
+    movies.value.forEach((_, idx) => {
+        updateMovieRating(idx, 0);
+    });
 }
 
 function addMovie(movie) {
@@ -76,6 +83,15 @@ onBeforeUnmount(stopWatch);
             </div>
             <div class="spacer" />
             <div class="movie-list-header-actions">
+                <button
+                    class="remove-ratings-btn"
+                    @click="removeRatings"
+                >
+                    <span class="btn-content">
+                        <ChartBarIcon />
+                        remove ratings
+                    </span>
+                </button>
                 <AddMovieModal @add:movie="addMovie" />
             </div>
         </div>
@@ -113,5 +129,10 @@ onBeforeUnmount(stopWatch);
 
 .spacer {
     @apply w-full flex-1;
+}
+
+.remove-ratings-btn {
+    @apply bg-orange-500 self-end justify-self-end;
+    filter: drop-shadow(0px 0px 10px rgba(249, 115, 22, 0.25));
 }
 </style>

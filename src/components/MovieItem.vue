@@ -22,9 +22,10 @@ const rating = computed({
 const hoveredRating = ref(0);
 
 function fillRating() {
-    for (let i = 1; i <= rating.value; i++) {
+    for (let i = 1; i <= rating.value + 1; i++) {
         setTimeout(() => {
-            hoveredRating.value = i;
+            if (i === rating.value + 1) hoveredRating.value = 0;
+            else hoveredRating.value = i;
         }, i * 200);
     }
 }
@@ -92,6 +93,7 @@ onMounted(fillRating);
                     />
                 </div>
             </div>
+            <div class="movie-item-actions-wrapper"></div>
         </div>
     </div>
 </template>
@@ -176,5 +178,9 @@ onMounted(fillRating);
 
 .--disabled {
     @apply cursor-not-allowed;
+}
+
+.movie-item-actions-wrapper {
+    @apply absolute bottom-0 right-0 flex gap-4;
 }
 </style>
