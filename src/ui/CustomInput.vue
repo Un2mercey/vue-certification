@@ -154,7 +154,7 @@ const inputClassNames = computed(() => ({
 }
 
 .placeholder {
-    @apply absolute pl-3 text-gray-500;
+    @apply absolute pl-3 text-gray-500 pointer-events-none;
 }
 
 input:focus,

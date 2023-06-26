@@ -1,5 +1,6 @@
 <script setup>
-import { computed, onBeforeUnmount, ref, watch } from 'vue';
+import { useResizeObserver } from '@/composables/resizeObserver';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 const props = defineProps({
     modelValue: {
@@ -72,14 +73,23 @@ const topPosition = computed(() => {
     return `${y + height + Number(props.offsetY)}px`;
 });
 
-const leftPosition = computed(() => {
-    if (!activator.value) return 0;
-    return `${activator.value.getBoundingClientRect().x + Number(props.offsetX)}px`;
-});
+const rightPosition = ref('0px');
+function setRightPosition(position = activator.value?.getBoundingClientRect().x || 0) {
+    rightPosition.value = `${position + Number(props.offsetX)}px`;
+}
+const containerWidth = ref('0px');
+function setContainerWidth(width = activator.value?.getBoundingClientRect().width || 0) {
+    containerWidth.value = `${width}px`;
+}
 
-const containerWidth = computed(() => {
-    if (!activator.value) return 0;
-    return `${activator.value.getBoundingClientRect().width}px`;
+const { observeResizeElement } = useResizeObserver();
+onMounted(() => {
+    setContainerWidth();
+    setRightPosition();
+    observeResizeElement(activator.value, ({ target }) => {
+        setContainerWidth(target.clientWidth);
+        setRightPosition(target.offsetLeft);
+    });
 });
 
 const stopWatch = watch(
@@ -122,7 +132,7 @@ onBeforeUnmount(stopWatch);
                 class="overlay-content"
                 @click="isOpened = false"
             >
-                <div class="select-wrapper">
+                <div class="select-wrapper scrollbar-thin">
                     <TransitionGroup name="list">
                         <div
                             v-for="item in availableItems"
@@ -174,15 +184,19 @@ onBeforeUnmount(stopWatch);
 }
 
 .select-wrapper {
-    @apply absolute flex flex-col px-4 py-2 gap-2 rounded-xl;
-    background: rgba(234, 179, 8, 0.95);
+    @apply absolute inline-flex flex-col items-start p-4 gap-2 rounded-xl
+        max-h-40 overflow-y-auto text-white;
+
+    background: rgba(16, 24, 39);
     top: v-bind(topPosition);
-    left: v-bind(leftPosition);
+    right: v-bind(rightPosition);
     width: v-bind(containerWidth);
+    box-shadow: 0 8px 24px 0 rgba(255, 255, 255, 0.12), 0 4px 4px 0 rgba(255, 255, 255, 0.04);
 }
 
 .select-option {
-    @apply cursor-pointer hover:text-gray-600;
+    @apply flex items-center self-stretch gap-2 py-2 px-4 cursor-pointer
+        hover:bg-indigo-500 duration-150 rounded-xl;
 }
 
 .selected-item {
