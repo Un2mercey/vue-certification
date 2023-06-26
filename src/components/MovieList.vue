@@ -1,7 +1,8 @@
 <script setup>
-import { computed, onBeforeUnmount, watchEffect } from 'vue';
-import AddMovieModal from '@/components/AddMovieModal.vue';
+import { ChartBarIcon } from '@heroicons/vue/24/outline';
+import { computed, onBeforeUnmount, ref, watchEffect } from 'vue';
 import MovieItem from '@/components/MovieItem.vue';
+import MovieModal from '@/components/MovieModal.vue';
 
 const props = defineProps({
     isLoading: {
@@ -14,6 +15,7 @@ const props = defineProps({
     },
 });
 const emit = defineEmits(['update:isLoading', 'update:movies']);
+const movieModalRef = ref(null);
 const movies = computed({
     get() {
         return props.movies;
@@ -22,9 +24,21 @@ const movies = computed({
         emit('update:movies', value);
     },
 });
+const avgRating = computed(() => {
+    if (!movies.value.length) return 0;
+
+    const sum = movies.value.reduce((acc, { rating }) => acc + rating, 0);
+    return (sum / movies.value.length).toFixed(1);
+});
 
 function updateMovieRating(index, newRating) {
     movies.value[index].rating = newRating;
+}
+
+function removeRatings() {
+    movies.value.forEach((_, idx) => {
+        updateMovieRating(idx, 0);
+    });
 }
 
 function addMovie(movie) {
@@ -33,9 +47,22 @@ function addMovie(movie) {
         {
             ...movie,
             id: movies.value.at(-1).id + 1,
-            rating: null,
+            rating: 0,
         },
     ];
+}
+
+function editMovie(form) {
+    let movieIdx = movies.value.findIndex(({ id }) => id === form.id);
+    movies.value.splice(movieIdx, 1, { ...movies.value[movieIdx], ...form });
+}
+
+function openEditModal(index) {
+    movieModalRef.value.edit(movies.value[index]);
+}
+
+function removeMovie(index) {
+    movies.value.splice(index, 1);
 }
 
 async function loadImages() {
@@ -65,9 +92,27 @@ onBeforeUnmount(stopWatch);
 <template>
     <section class="movie-list-wrapper">
         <div class="movie-list-header">
+            <div class="movie-list-header-title">
+                total movies: {{ movies.length }}
+                <span>/</span>
+                average rating: {{ avgRating }}
+            </div>
             <div class="spacer" />
             <div class="movie-list-header-actions">
-                <AddMovieModal @add:movie="addMovie" />
+                <button
+                    class="remove-ratings-btn"
+                    @click="removeRatings"
+                >
+                    <span class="btn-content">
+                        <ChartBarIcon />
+                        remove ratings
+                    </span>
+                </button>
+                <MovieModal
+                    ref="movieModalRef"
+                    @add:movie="addMovie"
+                    @edit:movie="editMovie"
+                />
             </div>
         </div>
         <div class="movie-list scrollbar-thin">
@@ -76,6 +121,8 @@ onBeforeUnmount(stopWatch);
                 :key="movie.id"
                 :movie="movie"
                 @update:rating="updateMovieRating(index, $event)"
+                @remove:movie="removeMovie(index)"
+                @edit:movie="openEditModal(index)"
             />
         </div>
     </section>
@@ -87,7 +134,11 @@ onBeforeUnmount(stopWatch);
 }
 
 .movie-list-header {
-    @apply flex items-center justify-between w-full max-w-7xl px-8;
+    @apply flex items-center justify-between w-full max-w-7xl pr-8;
+}
+
+.movie-list-header-title {
+    @apply text-white text-xl capitalize flex gap-8;
 }
 
 .movie-list-header-actions {
@@ -99,6 +150,11 @@ onBeforeUnmount(stopWatch);
 }
 
 .spacer {
-    @apply w-full flex-1;
+    @apply w-full flex-1 mx-8;
+}
+
+.remove-ratings-btn {
+    @apply bg-orange-500 self-end justify-self-end;
+    filter: drop-shadow(0px 0px 10px rgba(249, 115, 22, 0.25));
 }
 </style>

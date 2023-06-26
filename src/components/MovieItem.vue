@@ -1,14 +1,14 @@
 <script setup>
-import { StarIcon } from '@heroicons/vue/24/solid';
+import { PencilIcon, StarIcon, TrashIcon } from '@heroicons/vue/24/solid';
 import { computed, onMounted, ref } from 'vue';
 
 const props = defineProps({
     movie: {
         type: Object,
-        default: () => ({}),
+        required: true,
     },
 });
-const emit = defineEmits(['update:rating']);
+const emit = defineEmits(['update:rating', 'remove:movie', 'edit:movie']);
 const movie = computed(() => props.movie);
 const rating = computed({
     get() {
@@ -22,18 +22,24 @@ const rating = computed({
 const hoveredRating = ref(0);
 
 function fillRating() {
-    for (let i = 1; i <= rating.value; i++) {
+    for (let i = 1; i <= rating.value + 1; i++) {
         setTimeout(() => {
-            hoveredRating.value = i;
+            if (i === rating.value + 1) hoveredRating.value = 0;
+            else hoveredRating.value = i;
         }, i * 200);
     }
 }
 
+const isHovered = ref(false);
 onMounted(fillRating);
 </script>
 
 <template>
-    <div class="movie-item">
+    <div
+        class="movie-item"
+        @mouseenter="isHovered = true"
+        @mouseleave="isHovered = false"
+    >
         <div class="movie-item-image-wrapper">
             <img
                 :src="movie.image"
@@ -68,7 +74,7 @@ onMounted(fillRating);
                     </span>
                 </div>
             </div>
-            <div class="movie-item-description-wrapper">
+            <div class="movie-item-description-wrapper scrollbar-thin --light">
                 <p class="movie-item-description">
                     {{ movie.description }}
                 </p>
@@ -91,6 +97,29 @@ onMounted(fillRating);
                         @click="star !== rating && (rating = star)"
                     />
                 </div>
+                <Transition name="fade-fast">
+                    <div
+                        v-show="isHovered"
+                        class="movie-item-actions-wrapper"
+                    >
+                        <button
+                            class="btn-icon icon-m btn-edit"
+                            @click="emit('edit:movie')"
+                        >
+                            <span class="btn-content">
+                                <PencilIcon />
+                            </span>
+                        </button>
+                        <button
+                            class="btn-icon icon-m btn-remove"
+                            @click="emit('remove:movie')"
+                        >
+                            <span class="btn-content">
+                                <TrashIcon />
+                            </span>
+                        </button>
+                    </div>
+                </Transition>
             </div>
         </div>
     </div>
@@ -131,7 +160,7 @@ onMounted(fillRating);
 }
 
 .movie-item-title-wrapper {
-    @apply h-16 shrink-0 w-full;
+    @apply h-16 shrink-0 w-full flex-1;
 }
 
 .movie-item-title {
@@ -147,7 +176,7 @@ onMounted(fillRating);
 }
 
 .movie-item-genres-wrapper {
-    @apply flex items-center justify-start space-x-1;
+    @apply flex flex-wrap items-center justify-start gap-1;
 }
 
 .movie-item-genre-tag {
@@ -176,5 +205,17 @@ onMounted(fillRating);
 
 .--disabled {
     @apply cursor-not-allowed;
+}
+
+.movie-item-actions-wrapper {
+    @apply flex gap-3 justify-center items-center self-stretch ml-auto;
+}
+
+.btn-edit {
+    @apply hover:bg-violet-400 active:bg-violet-400;
+}
+
+.btn-remove {
+    @apply hover:bg-red-400 active:bg-red-400;
 }
 </style>

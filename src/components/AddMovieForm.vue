@@ -8,6 +8,7 @@ import { computed, reactive } from 'vue';
 const emit = defineEmits(['submit']);
 
 const form = reactive({
+    id: 0,
     name: '',
     description: '',
     image: '',
@@ -74,7 +75,13 @@ function validate() {
     });
 }
 
-defineExpose({ isFormValid, validate });
+function setForm(newForm) {
+    Object.keys(form).forEach((key) => {
+        form[key] = newForm[key];
+    });
+}
+
+defineExpose({ isFormValid, validate, setForm });
 </script>
 
 <template>
