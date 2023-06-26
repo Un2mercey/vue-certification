@@ -4,26 +4,40 @@ import { PlusIcon } from '@heroicons/vue/24/solid';
 import { computed, ref } from 'vue';
 import AddMovieForm from '@/components/AddMovieForm.vue';
 
-const emit = defineEmits(['add:movie']);
+const emit = defineEmits(['add:movie', 'edit:movie']);
 const isOpened = ref(false);
 const formRef = ref(null);
+const modalTitle = ref('Add new movie');
 
 const isFormValid = computed(() => formRef.value?.isFormValid);
 const validate = computed(() => formRef.value?.validate);
 
+function edit(movie) {
+    modalTitle.value = 'Movie editing';
+    isOpened.value = true;
+    setTimeout(() => formRef.value.setForm(movie));
+}
+
 function close() {
     isOpened.value = false;
+    modalTitle.value = 'Add new movie';
 }
 function save(form) {
-    emit('add:movie', form);
+    if (form.id) {
+        emit('edit:movie', form);
+    } else {
+        emit('add:movie', form);
+    }
     close();
 }
+
+defineExpose({ edit });
 </script>
 
 <template>
     <CustomDialog
         v-model="isOpened"
-        title="Add new movie"
+        :title="modalTitle"
     >
         <template #activator="{ props }">
             <button

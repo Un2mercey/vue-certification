@@ -1,6 +1,6 @@
 <script setup>
 import { ChartBarIcon } from '@heroicons/vue/24/outline';
-import { computed, onBeforeUnmount, watchEffect } from 'vue';
+import { computed, onBeforeUnmount, ref, watchEffect } from 'vue';
 import MovieItem from '@/components/MovieItem.vue';
 import MovieModal from '@/components/MovieModal.vue';
 
@@ -15,6 +15,7 @@ const props = defineProps({
     },
 });
 const emit = defineEmits(['update:isLoading', 'update:movies']);
+const movieModalRef = ref(null);
 const movies = computed({
     get() {
         return props.movies;
@@ -51,8 +52,13 @@ function addMovie(movie) {
     ];
 }
 
-function editMovie(index) {
-    console.log(movies.value[index]);
+function editMovie(form) {
+    let movieIdx = movies.value.findIndex(({ id }) => id === form.id);
+    movies.value.splice(movieIdx, 1, { ...movies.value[movieIdx], ...form });
+}
+
+function openEditModal(index) {
+    movieModalRef.value.edit(movies.value[index]);
 }
 
 function removeMovie(index) {
@@ -102,7 +108,11 @@ onBeforeUnmount(stopWatch);
                         remove ratings
                     </span>
                 </button>
-                <MovieModal @add:movie="addMovie" />
+                <MovieModal
+                    ref="movieModalRef"
+                    @add:movie="addMovie"
+                    @edit:movie="editMovie"
+                />
             </div>
         </div>
         <div class="movie-list scrollbar-thin">
@@ -112,7 +122,7 @@ onBeforeUnmount(stopWatch);
                 :movie="movie"
                 @update:rating="updateMovieRating(index, $event)"
                 @remove:movie="removeMovie(index)"
-                @edit:movie="editMovie(index)"
+                @edit:movie="openEditModal(index)"
             />
         </div>
     </section>
@@ -140,7 +150,7 @@ onBeforeUnmount(stopWatch);
 }
 
 .spacer {
-    @apply w-full flex-1;
+    @apply w-full flex-1 mx-8;
 }
 
 .remove-ratings-btn {

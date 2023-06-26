@@ -88,7 +88,7 @@ const inputClassNames = computed(() => ({
                 <textarea
                     v-else
                     :id="inputId"
-                    :name="modelValue"
+                    :value="modelValue"
                     :disabled="props.isDisabled"
                     type="text"
                     class="textarea"

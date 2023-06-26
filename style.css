@@ -35,6 +35,10 @@
     background-color: transparent;
 }
 
+.scrollbar-thin.--light::-webkit-scrollbar-thumb {
+    @apply bg-gray-300;
+}
+
 p,
 textarea {
     @apply scrollbar-thin overflow-y-auto;
