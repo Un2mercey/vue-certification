@@ -62,7 +62,10 @@ function validateImage(src) {
 const isFormValid = computed(() => {
     return (
         Object.keys(errors)
-            .map((key) => !errors[key].hasError && errors[key].validatorFn(form[key]))
+            .map((key) => {
+                if (key === 'image') return !errors[key].hasError;
+                return !errors[key].hasError && errors[key].validatorFn(form[key]);
+            })
             .filter(Boolean).length === Object.keys(errors).length
     );
 });
