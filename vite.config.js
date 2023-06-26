@@ -4,6 +4,7 @@ import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+    base: '/vue.js-certification_movie-rating',
     plugins: [vue()],
     resolve: {
         alias: {
