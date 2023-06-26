@@ -1,5 +1,5 @@
 <script setup>
-import { StarIcon } from '@heroicons/vue/24/solid';
+import { PencilIcon, StarIcon, TrashIcon } from '@heroicons/vue/24/solid';
 import { computed, onMounted, ref } from 'vue';
 
 const props = defineProps({
@@ -8,7 +8,7 @@ const props = defineProps({
         default: () => ({}),
     },
 });
-const emit = defineEmits(['update:rating']);
+const emit = defineEmits(['update:rating', 'remove:movie', 'edit:movie']);
 const movie = computed(() => props.movie);
 const rating = computed({
     get() {
@@ -92,8 +92,25 @@ onMounted(fillRating);
                         @click="star !== rating && (rating = star)"
                     />
                 </div>
+                <div class="movie-item-actions-wrapper">
+                    <button
+                        class="btn-icon icon-m btn-edit"
+                        @click="emit('edit:movie')"
+                    >
+                        <span class="btn-content">
+                            <PencilIcon />
+                        </span>
+                    </button>
+                    <button
+                        class="btn-icon icon-m btn-remove"
+                        @click="emit('remove:movie')"
+                    >
+                        <span class="btn-content">
+                            <TrashIcon />
+                        </span>
+                    </button>
+                </div>
             </div>
-            <div class="movie-item-actions-wrapper"></div>
         </div>
     </div>
 </template>
@@ -181,6 +198,14 @@ onMounted(fillRating);
 }
 
 .movie-item-actions-wrapper {
-    @apply absolute bottom-0 right-0 flex gap-4;
+    @apply flex gap-3 justify-center items-center self-stretch ml-auto;
+}
+
+.btn-edit {
+    @apply hover:bg-violet-400 active:bg-violet-400;
+}
+
+.btn-remove {
+    @apply hover:bg-red-400 active:bg-red-400;
 }
 </style>

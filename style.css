@@ -82,6 +82,18 @@ button:disabled {
     @apply cursor-not-allowed opacity-90 pointer-events-none !bg-gray-500 !filter-none;
 }
 
+.btn-icon {
+    @apply bg-gray-400 rounded-full duration-150 cursor-pointer;
+}
+
+.btn-icon.icon-m {
+    @apply p-2 m-0;
+}
+
+.btn-icon.icon-m svg {
+    @apply w-4 h-4 text-white;
+}
+
 .error-messages {
     @apply flex flex-col gap-1;
 }

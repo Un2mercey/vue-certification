@@ -1,8 +1,8 @@
 <script setup>
 import { ChartBarIcon } from '@heroicons/vue/24/outline';
 import { computed, onBeforeUnmount, watchEffect } from 'vue';
-import AddMovieModal from '@/components/AddMovieModal.vue';
 import MovieItem from '@/components/MovieItem.vue';
+import MovieModal from '@/components/MovieModal.vue';
 
 const props = defineProps({
     isLoading: {
@@ -24,6 +24,8 @@ const movies = computed({
     },
 });
 const avgRating = computed(() => {
+    if (!movies.value.length) return 0;
+
     const sum = movies.value.reduce((acc, { rating }) => acc + rating, 0);
     return (sum / movies.value.length).toFixed(1);
 });
@@ -44,9 +46,17 @@ function addMovie(movie) {
         {
             ...movie,
             id: movies.value.at(-1).id + 1,
-            rating: null,
+            rating: 0,
         },
     ];
+}
+
+function editMovie(index) {
+    console.log(movies.value[index]);
+}
+
+function removeMovie(index) {
+    movies.value.splice(index, 1);
 }
 
 async function loadImages() {
@@ -92,7 +102,7 @@ onBeforeUnmount(stopWatch);
                         remove ratings
                     </span>
                 </button>
-                <AddMovieModal @add:movie="addMovie" />
+                <MovieModal @add:movie="addMovie" />
             </div>
         </div>
         <div class="movie-list scrollbar-thin">
@@ -101,6 +111,8 @@ onBeforeUnmount(stopWatch);
                 :key="movie.id"
                 :movie="movie"
                 @update:rating="updateMovieRating(index, $event)"
+                @remove:movie="removeMovie(index)"
+                @edit:movie="editMovie(index)"
             />
         </div>
     </section>
