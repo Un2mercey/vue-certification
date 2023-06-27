@@ -13,7 +13,7 @@ const props = defineProps({
     },
     offsetY: {
         type: [String, Number],
-        default: '4',
+        default: '0',
     },
     offsetX: {
         type: [String, Number],
@@ -53,7 +53,7 @@ const touched = computed({
 });
 
 const isOpened = ref(false);
-const activator = ref();
+const activator = ref(null);
 const availableItems = computed(() => {
     return props.items.filter((item) => !modelValue.value.includes(item));
 });
@@ -67,29 +67,42 @@ function removeItem(item) {
     modelValue.value = modelValue.value.filter((selectedItem) => selectedItem !== item);
 }
 
-const topPosition = computed(() => {
-    if (!activator.value) return 0;
-    const { y, height } = activator.value.getBoundingClientRect();
-    return `${y + height + Number(props.offsetY)}px`;
+const activatorRects = computed(() => {
+    if (activator.value) return activator.value.getBoundingClientRect();
+
+    return {
+        height: 0,
+        width: 0,
+        x: 0,
+        y: 0,
+    };
 });
 
+const topPosition = ref('0px');
+function setTopPosition(position = activatorRects.value.y) {
+    topPosition.value = `${position + Number(props.offsetY)}px`;
+}
+
 const rightPosition = ref('0px');
-function setRightPosition(position = activator.value?.getBoundingClientRect().x || 0) {
+function setRightPosition(position = activatorRects.value.x) {
     rightPosition.value = `${position + Number(props.offsetX)}px`;
 }
+
 const containerWidth = ref('0px');
-function setContainerWidth(width = activator.value?.getBoundingClientRect().width || 0) {
+function setContainerWidth(width = activatorRects.value.width) {
     containerWidth.value = `${width}px`;
+}
+
+function setPositions(target) {
+    setContainerWidth(target?.clientWidth);
+    setRightPosition(target?.offsetLeft);
+    setTopPosition(target?.offsetTop + target?.offsetHeight);
 }
 
 const { observeResizeElement } = useResizeObserver();
 onMounted(() => {
-    setContainerWidth();
-    setRightPosition();
-    observeResizeElement(activator.value, ({ target }) => {
-        setContainerWidth(target.clientWidth);
-        setRightPosition(target.offsetLeft);
-    });
+    setPositions();
+    observeResizeElement(activator.value, ({ target }) => setPositions(target));
 });
 
 const stopWatch = watch(

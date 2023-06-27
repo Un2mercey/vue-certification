@@ -5,30 +5,37 @@ import { computed, ref } from 'vue';
 import AddMovieForm from '@/components/AddMovieForm.vue';
 
 const emit = defineEmits(['add:movie', 'edit:movie']);
-const isOpened = ref(false);
-const formRef = ref(null);
 const modalTitle = ref('Add new movie');
 
+const formRef = ref(null);
 const isFormValid = computed(() => formRef.value?.isFormValid);
 const validate = computed(() => formRef.value?.validate);
 
+const dialogRef = ref(null);
+const openDialog = computed(() => dialogRef.value?.open);
+const closeDialog = computed(() => dialogRef.value?.close);
+
+function showModal(title) {
+    modalTitle.value = title;
+    openDialog.value();
+}
+
 function edit(movie) {
-    modalTitle.value = 'Movie editing';
-    isOpened.value = true;
+    showModal('Movie editing');
     setTimeout(() => formRef.value.setForm(movie));
 }
 
-function close() {
-    isOpened.value = false;
-    modalTitle.value = 'Add new movie';
+function hideModal() {
+    closeDialog.value();
 }
+
 function save(form) {
     if (form.id) {
         emit('edit:movie', form);
     } else {
         emit('add:movie', form);
     }
-    close();
+    hideModal();
 }
 
 defineExpose({ edit });
@@ -36,13 +43,13 @@ defineExpose({ edit });
 
 <template>
     <CustomDialog
-        v-model="isOpened"
+        ref="dialogRef"
         :title="modalTitle"
     >
-        <template #activator="{ props }">
+        <template #activator>
             <button
                 class="add-movie-btn"
-                v-bind="props"
+                @click="showModal('Add new movie')"
             >
                 <span class="btn-content">
                     <PlusIcon />
@@ -59,7 +66,7 @@ defineExpose({ edit });
         <template #actions>
             <button
                 class="dialog-cancel-btn"
-                @click="close"
+                @click="hideModal"
             >
                 <span class="btn-content">cancel</span>
             </button>

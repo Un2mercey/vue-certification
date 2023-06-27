@@ -79,6 +79,8 @@ function setForm(newForm) {
     Object.keys(form).forEach((key) => {
         form[key] = newForm[key];
     });
+
+    errors.genres.touched = true;
 }
 
 defineExpose({ isFormValid, validate, setForm });
