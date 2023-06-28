@@ -15,7 +15,7 @@ const rating = computed({
         return movie.value.rating;
     },
     set(rating) {
-        emit('update:rating', rating);
+        emit('update:rating', movie.value.id, rating);
     },
 });
 
@@ -104,7 +104,7 @@ onMounted(fillRating);
                     >
                         <button
                             class="btn-icon icon-m btn-edit"
-                            @click="emit('edit:movie')"
+                            @click="emit('edit:movie', movie.id)"
                         >
                             <span class="btn-content">
                                 <PencilIcon />
@@ -112,7 +112,7 @@ onMounted(fillRating);
                         </button>
                         <button
                             class="btn-icon icon-m btn-remove"
-                            @click="emit('remove:movie')"
+                            @click="emit('remove:movie', movie.id)"
                         >
                             <span class="btn-content">
                                 <TrashIcon />
@@ -128,7 +128,7 @@ onMounted(fillRating);
 <style scoped>
 .movie-item {
     @apply w-96 shrink-0 h-auto bg-white rounded-md flex flex-col items-center
-        justify-start overflow-hidden shadow-2xl mr-8 mt-8;
+    justify-start overflow-hidden shadow-2xl mr-8 mt-8;
 }
 
 .movie-item-image-wrapper {

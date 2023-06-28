@@ -25,19 +25,21 @@ const movies = computed({
     },
 });
 const avgRating = computed(() => {
-    if (!movies.value.length) return 0;
-
     const sum = movies.value.reduce((acc, { rating }) => acc + rating, 0);
     return (sum / movies.value.length).toFixed(1);
 });
 
-function updateMovieRating(index, newRating) {
-    movies.value[index].rating = newRating;
+function updateMovieRating(id, rating) {
+    movies.value = movies.value.map((movie) => {
+        if (movie.id === id) movie.rating = rating;
+        return movie;
+    });
 }
 
 function removeRatings() {
-    movies.value.forEach((_, idx) => {
-        updateMovieRating(idx, 0);
+    movies.value = movies.value.map((movie) => {
+        movie.rating = null;
+        return movie;
     });
 }
 
@@ -47,22 +49,25 @@ function addMovie(movie) {
         {
             ...movie,
             id: movies.value.at(-1).id + 1,
-            rating: 0,
+            rating: null,
         },
     ];
 }
 
 function editMovie(form) {
-    let movieIdx = movies.value.findIndex(({ id }) => id === form.id);
-    movies.value.splice(movieIdx, 1, { ...movies.value[movieIdx], ...form });
+    movies.value = movies.value.map((movie) => {
+        if (movie.id === form.id) return form;
+        return movie;
+    });
 }
 
-function openEditModal(index) {
-    movieModalRef.value.edit(movies.value[index]);
+function openEditModal(id) {
+    const movie = movies.value.find((movie) => movie.id === id);
+    movieModalRef.value.edit(movie);
 }
 
-function removeMovie(index) {
-    movies.value.splice(index, 1);
+function removeMovie(id) {
+    movies.value = movies.value.filter((movie) => movie.id !== id);
 }
 
 async function loadImages() {
@@ -94,8 +99,10 @@ onBeforeUnmount(stopWatch);
         <div class="movie-list-header">
             <div class="movie-list-header-title">
                 total movies: {{ movies.length }}
-                <span>/</span>
-                average rating: {{ avgRating }}
+                <template v-if="movies.length">
+                    <span>/</span>
+                    average rating: {{ avgRating }}
+                </template>
             </div>
             <div class="spacer" />
             <div class="movie-list-header-actions">
@@ -117,12 +124,12 @@ onBeforeUnmount(stopWatch);
         </div>
         <div class="movie-list scrollbar-thin">
             <MovieItem
-                v-for="(movie, index) in movies"
+                v-for="movie in movies"
                 :key="movie.id"
                 :movie="movie"
-                @update:rating="updateMovieRating(index, $event)"
-                @remove:movie="removeMovie(index)"
-                @edit:movie="openEditModal(index)"
+                @update:rating="updateMovieRating"
+                @remove:movie="removeMovie"
+                @edit:movie="openEditModal"
             />
         </div>
     </section>
