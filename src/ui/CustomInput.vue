@@ -76,24 +76,22 @@ const inputClassNames = computed(() => ({
                 <input
                     v-if="props.type === 'input'"
                     :id="inputId"
-                    :value="modelValue"
+                    v-model.trim="modelValue"
                     :disabled="props.isDisabled"
                     type="text"
                     class="input"
                     :class="{ valid: isValidClassName }"
-                    @input="modelValue = $event.target.value"
                     @focus="isFocused = true"
                     @blur="isFocused = false"
                 />
                 <textarea
                     v-else
                     :id="inputId"
-                    :value="modelValue"
+                    v-model.trim="modelValue"
                     :disabled="props.isDisabled"
                     type="text"
                     class="textarea"
                     :class="{ valid: isValidClassName }"
-                    @input="modelValue = $event.target.value"
                     @focus="isFocused = true"
                     @blur="isFocused = false"
                 />
