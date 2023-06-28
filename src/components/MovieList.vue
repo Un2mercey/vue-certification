@@ -1,9 +1,8 @@
 <script setup>
 import { ChartBarIcon } from '@heroicons/vue/24/outline';
-import { computed, defineAsyncComponent, onBeforeUnmount, ref, watchEffect } from 'vue';
+import { computed, onBeforeUnmount, ref, watchEffect } from 'vue';
+import MovieModal from '@/components/MovieModal.vue';
 import MovieItem from './MovieItem.vue';
-
-const MovieModal = defineAsyncComponent(() => import('@/components/MovieModal.vue'));
 
 const props = defineProps({
     isLoading: {
