@@ -117,11 +117,11 @@ button:disabled {
     @apply translate-y-0 opacity-100;
 }
 .slide-fade-bottom-enter {
-    @apply translate-y-[-50%] opacity-0;
+    @apply translate-y-[-20px] opacity-0;
 }
 .slide-fade-bottom-enter-from,
 .slide-fade-bottom-leave-to {
-    @apply translate-y-[50%] opacity-0;
+    @apply translate-y-[20px] opacity-0;
 }
 
 /* fade-fast transition */

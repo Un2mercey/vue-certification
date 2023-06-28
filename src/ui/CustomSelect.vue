@@ -1,6 +1,6 @@
 <script setup>
 import { useResizeObserver } from '@/composables/resizeObserver';
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { computed, onUpdated, ref, watch } from 'vue';
 
 const props = defineProps({
     modelValue: {
@@ -71,41 +71,20 @@ const activatorRects = computed(() => {
     if (activator.value) return activator.value.getBoundingClientRect();
 
     return {
+        left: 0,
+        right: 0,
+        top: 0,
         height: 0,
         width: 0,
-        x: 0,
-        y: 0,
     };
 });
 
-const topPosition = ref('0px');
-function setTopPosition(position = activatorRects.value.y) {
-    topPosition.value = `${position + Number(props.offsetY)}px`;
-}
+const topPosition = ref(activatorRects.value.top + activatorRects.value.height + Number(props.offsetY) + 'px');
+const containerWidth = ref(activatorRects.value.width + 'px');
+const leftPosition = ref(activatorRects.value.left + 'px');
+const rightPosition = computed(() => activatorRects.value.right + 'px');
 
-const rightPosition = ref('0px');
-function setRightPosition(position = activatorRects.value.x) {
-    rightPosition.value = `${position + Number(props.offsetX)}px`;
-}
-
-const containerWidth = ref('0px');
-function setContainerWidth(width = activatorRects.value.width) {
-    containerWidth.value = `${width}px`;
-}
-
-function setPositions(target) {
-    setContainerWidth(target?.clientWidth);
-    setRightPosition(target?.offsetLeft);
-    setTopPosition(target?.offsetTop + target?.offsetHeight);
-}
-
-const { observeResizeElement } = useResizeObserver();
-onMounted(() => {
-    setPositions();
-    observeResizeElement(activator.value, ({ target }) => setPositions(target));
-});
-
-const stopWatch = watch(
+watch(
     () => availableItems.value.length,
     (newValue) => {
         if (!newValue) {
@@ -113,7 +92,15 @@ const stopWatch = watch(
         }
     },
 );
-onBeforeUnmount(stopWatch);
+
+const { observeResizeElement } = useResizeObserver();
+onUpdated(() => {
+    observeResizeElement(activator.value, (e) => {
+        containerWidth.value = e.target.offsetWidth + 'px';
+        leftPosition.value = e.target.offsetLeft + 'px';
+        topPosition.value = e.target.offsetTop + e.target.offsetHeight + Number(props.offsetY) + 'px';
+    });
+});
 </script>
 
 <template>
@@ -135,38 +122,39 @@ onBeforeUnmount(stopWatch);
         </TransitionGroup>
     </div>
     <Teleport to="#overlay-container">
-        <div
-            v-if="isOpened && availableItems.length"
-            id="select"
-            class="overlay"
-            aria-role="menu"
-        >
+        <KeepAlive>
             <div
-                class="overlay-content"
-                @click="isOpened = false"
+                v-if="isOpened && availableItems.length"
+                id="select"
+                class="overlay"
             >
-                <div class="select-wrapper scrollbar-thin">
-                    <TransitionGroup name="list">
-                        <div
-                            v-for="item in availableItems"
-                            :key="`select-item-${item}`"
-                            class="select-option"
-                            @click.stop="selectItem(item)"
-                        >
-                            {{ item }}
-                        </div>
-                    </TransitionGroup>
+                <div
+                    class="overlay-content"
+                    @click="isOpened = false"
+                >
+                    <div class="select-wrapper scrollbar-thin">
+                        <TransitionGroup name="list">
+                            <div
+                                v-for="item in availableItems"
+                                :key="`select-item-${item}`"
+                                class="select-option"
+                                @click.stop="selectItem(item)"
+                            >
+                                {{ item }}
+                            </div>
+                        </TransitionGroup>
+                    </div>
                 </div>
             </div>
-        </div>
+        </KeepAlive>
     </Teleport>
 </template>
 
 <style scoped>
 .activator {
     @apply relative text-base box-border w-full p-2 gap-2.5 rounded-lg flex
-        flex-row items-center flex-wrap hover:border-yellow-500 cursor-pointer
-        min-h-[50px];
+    flex-row items-center flex-wrap hover:border-yellow-500 cursor-pointer
+    min-h-[50px];
 
     box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.15);
     border: 1px solid rgb(156 163 175);
@@ -198,10 +186,11 @@ onBeforeUnmount(stopWatch);
 
 .select-wrapper {
     @apply absolute inline-flex flex-col items-start p-4 gap-2 rounded-xl
-        max-h-40 overflow-y-auto text-white;
+    max-h-40 overflow-y-auto text-white;
 
     background: rgba(16, 24, 39);
     top: v-bind(topPosition);
+    left: v-bind(leftPosition);
     right: v-bind(rightPosition);
     width: v-bind(containerWidth);
     box-shadow: 0 8px 24px 0 rgba(255, 255, 255, 0.12), 0 4px 4px 0 rgba(255, 255, 255, 0.04);
@@ -209,11 +198,11 @@ onBeforeUnmount(stopWatch);
 
 .select-option {
     @apply flex items-center self-stretch gap-2 py-2 px-4 cursor-pointer
-        hover:bg-indigo-500 duration-150 rounded-xl;
+    hover:bg-indigo-500 duration-150 rounded-xl;
 }
 
 .selected-item {
     @apply flex px-2 py-0.5 items-center rounded-full gap-2 text-white text-sm
-        bg-indigo-500 hover:bg-indigo-400;
+    bg-indigo-500 hover:bg-indigo-400;
 }
 </style>
