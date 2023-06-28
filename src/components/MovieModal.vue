@@ -25,17 +25,13 @@ function edit(movie) {
     setTimeout(() => formRef.value.setForm(movie));
 }
 
-function hideModal() {
-    closeDialog.value();
-}
-
 function save(form) {
     if (form.id) {
         emit('edit:movie', form);
     } else {
         emit('add:movie', form);
     }
-    hideModal();
+    closeDialog.value();
 }
 
 defineExpose({ edit });
@@ -66,7 +62,7 @@ defineExpose({ edit });
         <template #actions>
             <button
                 class="dialog-cancel-btn"
-                @click="hideModal"
+                @click="closeDialog"
             >
                 <span class="btn-content">cancel</span>
             </button>

@@ -32,7 +32,6 @@ defineExpose({ open, close });
                 v-if="isShown"
                 id="dialog"
                 class="overlay"
-                aria-role="dialog"
                 aria-modal="true"
             >
                 <div class="overlay-scrim" />

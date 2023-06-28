@@ -6,8 +6,7 @@ import FormControl from '@/ui/FormControl.vue';
 import { computed, reactive } from 'vue';
 
 const emit = defineEmits(['submit']);
-
-const form = reactive({
+const emptyForm = Object.freeze({
     id: 0,
     name: '',
     description: '',
@@ -15,14 +14,17 @@ const form = reactive({
     genres: [],
     inTheaters: false,
 });
+const form = reactive({ ...emptyForm });
 const errors = reactive({
     name: {
         hasError: false,
+        touched: false,
         errorMessages: ['The field is required'],
         validatorFn: (value) => !!value.length,
     },
     image: {
         hasError: false,
+        touched: false,
         errorMessages: ['The given URI is invalid'],
         validatorFn: validateImage,
     },
@@ -75,12 +77,12 @@ function validate() {
     });
 }
 
-function setForm(newForm) {
+function setForm(newForm = emptyForm) {
     Object.keys(form).forEach((key) => {
         form[key] = newForm[key];
     });
 
-    errors.genres.touched = true;
+    Object.keys(errors).forEach((key) => (errors[key].touched = !!newForm.id));
 }
 
 defineExpose({ isFormValid, validate, setForm });
