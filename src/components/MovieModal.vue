@@ -2,7 +2,7 @@
 import CustomDialog from '@/ui/CustomDialog.vue';
 import { PlusIcon } from '@heroicons/vue/24/solid';
 import { computed, ref } from 'vue';
-import AddMovieForm from '@/components/AddMovieForm.vue';
+import MovieForm from './MovieForm.vue';
 
 const emit = defineEmits(['add:movie', 'edit:movie']);
 const modalTitle = ref('Add new movie');
@@ -58,7 +58,7 @@ defineExpose({ edit });
             </button>
         </template>
         <template #content>
-            <AddMovieForm
+            <MovieForm
                 ref="formRef"
                 @submit="save"
             />
