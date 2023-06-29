@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 const props = defineProps({
     modelValue: {
@@ -34,6 +34,9 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    autofocus: {
+        type: Boolean,
+    },
 });
 const emit = defineEmits(['update:modelValue', 'update:hasError']);
 const modelValue = computed({
@@ -53,6 +56,19 @@ const inputClassNames = computed(() => ({
     'placeholder-visible': isPlaceholderVisible,
     disabled: props.isDisabled,
 }));
+
+const inputRef = ref(null);
+const textareaRef = ref(null);
+
+onMounted(() => {
+    if (props.autofocus) {
+        if (props.type === 'input') {
+            inputRef.value.focus();
+        } else {
+            textareaRef.value.focus();
+        }
+    }
+});
 </script>
 
 <template>
@@ -76,6 +92,7 @@ const inputClassNames = computed(() => ({
                 <input
                     v-if="props.type === 'input'"
                     :id="inputId"
+                    ref="inputRef"
                     v-model.trim="modelValue"
                     :disabled="props.isDisabled"
                     type="text"
@@ -87,6 +104,7 @@ const inputClassNames = computed(() => ({
                 <textarea
                     v-else
                     :id="inputId"
+                    ref="textareaRef"
                     v-model.trim="modelValue"
                     :disabled="props.isDisabled"
                     type="text"
