@@ -78,7 +78,7 @@ function validate() {
 }
 
 function setForm(newForm = emptyForm) {
-    Object.keys(form).forEach((key) => {
+    Object.keys(newForm).forEach((key) => {
         form[key] = newForm[key];
     });
 

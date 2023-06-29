@@ -71,6 +71,7 @@ function removeMovie(id) {
 }
 
 async function loadImages() {
+    emit('update:isLoading', true);
     const imagesToLoad = movies.value.map(({ image }) => {
         return new Promise((resolve, reject) => {
             const img = new Image();
@@ -81,7 +82,6 @@ async function loadImages() {
     });
 
     try {
-        emit('update:isLoading', true);
         await Promise.all(imagesToLoad);
         emit('update:isLoading', false);
     } catch {

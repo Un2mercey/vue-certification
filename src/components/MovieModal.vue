@@ -1,9 +1,9 @@
 <script setup>
 import CustomDialog from '@/ui/CustomDialog.vue';
 import { PlusIcon } from '@heroicons/vue/24/solid';
-import { computed, ref } from 'vue';
-import MovieForm from './MovieForm.vue';
+import { computed, defineAsyncComponent, ref } from 'vue';
 
+const MovieForm = defineAsyncComponent(() => import('./MovieForm.vue'));
 const emit = defineEmits(['add:movie', 'edit:movie']);
 const modalTitle = ref('Add new movie');
 
