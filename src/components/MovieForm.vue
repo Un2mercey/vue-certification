@@ -3,9 +3,24 @@ import CustomCheckbox from '@/ui/CustomCheckbox.vue';
 import CustomInput from '@/ui/CustomInput.vue';
 import CustomSelect from '@/ui/CustomSelect.vue';
 import FormControl from '@/ui/FormControl.vue';
-import { computed, reactive } from 'vue';
+import { computed, onMounted, reactive } from 'vue';
 
-const emit = defineEmits(['submit']);
+const props = defineProps({
+    prefill: {
+        type: Object,
+        default: undefined,
+    },
+});
+const emit = defineEmits(['update:prefill', 'submit']);
+const prefill = computed({
+    get() {
+        return props.prefill;
+    },
+    set(value) {
+        emit('update:prefill', value);
+    },
+});
+
 const emptyForm = Object.freeze({
     id: 0,
     name: '',
@@ -78,14 +93,18 @@ function validate() {
 }
 
 function setForm(newForm = emptyForm) {
-    Object.keys(form).forEach((key) => {
+    Object.keys(newForm).forEach((key) => {
         form[key] = newForm[key];
     });
 
     Object.keys(errors).forEach((key) => (errors[key].touched = !!newForm.id));
 }
 
-defineExpose({ isFormValid, validate, setForm });
+defineExpose({ isFormValid, validate });
+onMounted(() => {
+    setForm(prefill.value);
+    prefill.value = undefined;
+});
 </script>
 
 <template>

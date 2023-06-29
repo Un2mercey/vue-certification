@@ -1,5 +1,6 @@
 <script setup>
-import { computed, defineAsyncComponent, ref } from 'vue';
+import { XMarkIcon } from '@heroicons/vue/24/solid';
+import { computed, ref } from 'vue';
 
 const props = defineProps({
     title: {
@@ -9,7 +10,6 @@ const props = defineProps({
 });
 const isShown = ref(false);
 const title = computed(() => props.title);
-const DialogBody = defineAsyncComponent(() => import('./DialogBody.vue'));
 
 function open() {
     isShown.value = true;
@@ -28,18 +28,43 @@ defineExpose({ open, close });
     </div>
     <Teleport to="#overlay-container">
         <Transition>
-            <DialogBody
+            <div
                 v-if="isShown"
-                :title="title"
-                @close="close"
+                id="dialog"
+                class="overlay"
+                aria-modal="true"
             >
-                <template #content>
-                    <slot name="content" />
-                </template>
-                <template #actions>
-                    <slot name="actions" />
-                </template>
-            </DialogBody>
+                <div class="overlay-scrim" />
+                <div class="overlay-content">
+                    <div class="dialog">
+                        <div class="dialog-header">
+                            <h3
+                                v-if="title"
+                                class="dialog-header-title"
+                            >
+                                {{ title }}
+                            </h3>
+                            <button
+                                class="dialog-close-btn"
+                                @click="close"
+                            >
+                                <span class="btn-content">
+                                    <XMarkIcon />
+                                </span>
+                            </button>
+                        </div>
+                        <div class="dialog-content">
+                            <slot name="content" />
+                        </div>
+                        <div
+                            v-if="$slots.actions"
+                            class="dialog-actions"
+                        >
+                            <slot name="actions" />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </Transition>
     </Teleport>
 </template>
@@ -47,8 +72,8 @@ defineExpose({ open, close });
 <style scoped>
 .v-enter-active,
 .v-leave-active,
-.v-enter-active :deep(.dialog),
-.v-leave-active :deep(.dialog) {
+.v-enter-active .dialog,
+.v-leave-active .dialog {
     transition: all 0.5s ease;
 }
 
@@ -57,8 +82,36 @@ defineExpose({ open, close });
     opacity: 0;
 }
 
-.v-enter-from :deep(.dialog),
-.v-leave-to :deep(.dialog) {
+.v-enter-from .dialog,
+.v-leave-to .dialog {
     transform: translateY(-50px);
+}
+
+.dialog {
+    @apply flex flex-col z-0 w-[36vw] min-h-[45vh] gap-8;
+}
+
+.dialog-header {
+    @apply flex justify-between;
+}
+
+.dialog-header-title {
+    @apply text-3xl text-yellow-600 overflow-hidden whitespace-nowrap;
+}
+
+.dialog-content {
+    @apply flex flex-col gap-4;
+}
+
+.dialog-actions {
+    @apply flex items-center justify-between mt-auto;
+}
+
+.dialog-close-btn {
+    @apply p-0;
+}
+
+.dialog-close-btn span.btn-content {
+    @apply text-yellow-500 hover:text-red-500 active:text-red-500;
 }
 </style>

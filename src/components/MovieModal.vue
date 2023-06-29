@@ -1,13 +1,14 @@
 <script setup>
 import CustomDialog from '@/ui/CustomDialog.vue';
 import { PlusIcon } from '@heroicons/vue/24/solid';
-import { computed, ref } from 'vue';
-import MovieForm from './MovieForm.vue';
+import { computed, defineAsyncComponent, ref } from 'vue';
 
+const MovieForm = defineAsyncComponent(() => import('./MovieForm.vue'));
 const emit = defineEmits(['add:movie', 'edit:movie']);
 const modalTitle = ref('Add new movie');
 
 const formRef = ref(null);
+const prefillForm = ref();
 const isFormValid = computed(() => formRef.value?.isFormValid);
 const validate = computed(() => formRef.value?.validate);
 
@@ -22,7 +23,7 @@ function showModal(title) {
 
 function edit(movie) {
     showModal('Movie editing');
-    setTimeout(() => formRef.value.setForm(movie));
+    prefillForm.value = movie;
 }
 
 function save(form) {
@@ -56,6 +57,7 @@ defineExpose({ edit });
         <template #content>
             <MovieForm
                 ref="formRef"
+                v-model:prefill="prefillForm"
                 @submit="save"
             />
         </template>
