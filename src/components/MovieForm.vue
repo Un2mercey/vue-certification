@@ -97,6 +97,7 @@ defineExpose({ isFormValid, validate, setForm });
             label="name"
             :validation-fn="errors.name.validatorFn"
             :error-messages="errors.name.errorMessages"
+            autofocus
         />
         <CustomInput
             key="form-description"
