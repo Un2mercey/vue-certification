@@ -107,7 +107,7 @@ onBeforeUnmount(stopWatch);
             <div class="spacer" />
             <div class="movie-list-header-actions">
                 <button
-                    class="remove-ratings-btn"
+                    class="btn-primary"
                     @click="removeRatings"
                 >
                     <span class="btn-content">
@@ -158,10 +158,5 @@ onBeforeUnmount(stopWatch);
 
 .spacer {
     @apply w-full flex-1 mx-8;
-}
-
-.remove-ratings-btn {
-    @apply bg-orange-500 self-end justify-self-end;
-    filter: drop-shadow(0px 0px 10px rgba(249, 115, 22, 0.25));
 }
 </style>

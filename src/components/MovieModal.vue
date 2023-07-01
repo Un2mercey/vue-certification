@@ -45,7 +45,7 @@ defineExpose({ edit });
     >
         <template #activator>
             <button
-                class="add-movie-btn"
+                class="btn-primary"
                 @click="showModal('Add new movie')"
             >
                 <span class="btn-content">
@@ -80,11 +80,6 @@ defineExpose({ edit });
 </template>
 
 <style scoped>
-.add-movie-btn {
-    @apply bg-cyan-500 self-end justify-self-end;
-    filter: drop-shadow(0px 0px 10px rgba(6, 182, 212, 0.25));
-}
-
 .dialog-cancel-btn {
     @apply bg-red-500 hover:bg-red-300 active:bg-red-300;
     filter: drop-shadow(0px 0px 10px rgba(239, 68, 68, 0.25));
