@@ -1,17 +1,16 @@
 <script setup>
-import CustomLoader from '@/ui/CustomLoader.vue';
-import { ref } from 'vue';
-import MovieList from '@/components/MovieList.vue';
-import { items } from './mocks/movies.json';
-
-const movies = ref(items);
-const isLoading = ref(false);
+import MainLayout from '@/components/layout/MainLayout.vue';
 </script>
 
 <template>
-    <CustomLoader v-if="isLoading" />
-    <MovieList
-        v-model:is-loading="isLoading"
-        v-model:movies="movies"
-    />
+    <MainLayout>
+        <RouterView #="{ Component, route }">
+            <Transition name="fade">
+                <Component
+                    :is="Component"
+                    :key="route.fullPath"
+                />
+            </Transition>
+        </RouterView>
+    </MainLayout>
 </template>

@@ -1,5 +1,5 @@
 <script setup>
-import { ChartBarIcon } from '@heroicons/vue/24/outline';
+import { FilmIcon } from '@heroicons/vue/24/outline';
 import { computed, onBeforeUnmount, ref, watchEffect } from 'vue';
 import MovieModal from '@/components/MovieModal.vue';
 import MovieItem from './MovieItem.vue';
@@ -95,7 +95,7 @@ onBeforeUnmount(stopWatch);
 </script>
 
 <template>
-    <section class="movie-list-wrapper">
+    <div class="movie-list-wrapper">
         <div class="movie-list-header">
             <div class="movie-list-header-title">
                 total movies: {{ movies.length }}
@@ -111,7 +111,7 @@ onBeforeUnmount(stopWatch);
                     @click="removeRatings"
                 >
                     <span class="btn-content">
-                        <ChartBarIcon />
+                        <FilmIcon />
                         remove ratings
                     </span>
                 </button>
@@ -132,16 +132,16 @@ onBeforeUnmount(stopWatch);
                 @edit:movie="openEditModal"
             />
         </div>
-    </section>
+    </div>
 </template>
 
 <style scoped>
 .movie-list-wrapper {
-    @apply flex flex-col gap-2;
+    @apply flex flex-col gap-2 self-start m-auto;
 }
 
 .movie-list-header {
-    @apply flex items-center justify-between w-full max-w-7xl pr-8;
+    @apply flex items-center justify-between w-full max-w-7xl pr-8 py-1;
 }
 
 .movie-list-header-title {
@@ -153,7 +153,9 @@ onBeforeUnmount(stopWatch);
 }
 
 .movie-list {
-    @apply flex flex-wrap items-center justify-between max-w-7xl overflow-auto h-[860px];
+    @apply flex flex-wrap items-center justify-between max-w-7xl overflow-auto h-auto max-h-[800px];
+    min-height: 800px;
+    min-width: 850px;
 }
 
 .spacer {
