@@ -73,45 +73,45 @@ onMounted(() => {
 
 <template>
     <fieldset
-        class="input-container-wrapper"
         :class="{ error: hasError }"
+        class="input-container-wrapper"
     >
         <div class="input-container">
             <label
                 v-if="label"
+                :class="{ valid: isValidClassName }"
                 :for="inputId"
                 class="label"
-                :class="{ valid: isValidClassName }"
             >
                 {{ label }}
             </label>
             <div
-                class="input-wrapper"
                 :class="inputClassNames"
+                class="input-wrapper"
             >
                 <input
                     v-if="props.type === 'input'"
                     :id="inputId"
                     ref="inputRef"
                     v-model.trim="modelValue"
-                    :disabled="props.isDisabled"
-                    type="text"
-                    class="input"
                     :class="{ valid: isValidClassName }"
-                    @focus="isFocused = true"
+                    :disabled="props.isDisabled"
+                    class="input"
+                    type="text"
                     @blur="isFocused = false"
+                    @focus="isFocused = true"
                 />
                 <textarea
                     v-else
                     :id="inputId"
                     ref="textareaRef"
                     v-model.trim="modelValue"
-                    :disabled="props.isDisabled"
-                    type="text"
-                    class="textarea"
                     :class="{ valid: isValidClassName }"
-                    @focus="isFocused = true"
+                    :disabled="props.isDisabled"
+                    class="textarea"
+                    type="text"
                     @blur="isFocused = false"
+                    @focus="isFocused = true"
                 />
                 <span
                     v-if="isPlaceholderVisible"
@@ -154,6 +154,7 @@ onMounted(() => {
 .input-wrapper {
     @apply flex w-full items-center relative;
 }
+
 .input,
 .textarea {
     @apply relative text-base box-border w-full p-3 gap-2.5 rounded-lg flex flex-row items-start text-yellow-500 disabled:text-gray-500;

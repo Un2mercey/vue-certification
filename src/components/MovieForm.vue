@@ -12,6 +12,12 @@ const props = defineProps({
     },
 });
 const emit = defineEmits(['update:prefill', 'submit']);
+
+/**
+ * @description Prefills the form
+ *
+ * @type {WritableComputedRef<Movie | undefined>}
+ */
 const prefill = computed({
     get() {
         return props.prefill;
@@ -52,6 +58,10 @@ const errors = reactive({
 });
 const genres = Object.freeze(['Drama', 'Crime', 'Action', 'Comedy', 'Biography', 'Thriller', 'Adventure']);
 
+/**
+ * @param {string} src
+ * @returns {boolean}
+ */
 function validateImage(src) {
     if (!src.length) return true;
     const img = new Image();
@@ -113,31 +123,31 @@ onMounted(() => {
             key="form-name"
             v-model="form.name"
             v-model:has-error="errors.name.hasError"
-            label="name"
-            :validation-fn="errors.name.validatorFn"
             :error-messages="errors.name.errorMessages"
+            :validation-fn="errors.name.validatorFn"
             autofocus
+            label="name"
         />
         <CustomInput
             key="form-description"
             v-model="form.description"
-            type="textarea"
             label="description"
+            type="textarea"
         />
         <CustomInput
             key="form-image"
             v-model="form.image"
             v-model:has-error="errors.image.hasError"
+            :error-messages="errors.image.errorMessages"
+            :validation-fn="errors.image.validatorFn"
             label="image"
             placeholder-text="Give me a link"
-            :validation-fn="errors.image.validatorFn"
-            :error-messages="errors.image.errorMessages"
         />
         <FormControl
-            label="genres"
+            :error-messages="errors.genres.errorMessages"
             :has-error="errors.genres.hasError"
             :touched="errors.genres.touched"
-            :error-messages="errors.genres.errorMessages"
+            label="genres"
         >
             <CustomSelect
                 v-model="form.genres"

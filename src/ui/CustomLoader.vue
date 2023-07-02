@@ -2,9 +2,8 @@
     <Teleport to="#overlay-container">
         <div
             id="loader"
-            class="overlay"
-            aria-role="loader"
             aria-modal="true"
+            class="overlay"
         >
             <div class="overlay-scrim" />
             <div class="overlay-content">
@@ -23,15 +22,18 @@
     width: 160px;
     height: 160px;
 }
+
 .loader div {
     @apply absolute opacity-100;
     border: 4px solid rgb(6, 182, 212);
     border-radius: 50%;
     animation: loader 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
 }
+
 .loader div:nth-child(2) {
     animation-delay: -0.5s;
 }
+
 @keyframes loader {
     0% {
         top: 72px;
@@ -62,6 +64,7 @@
         opacity: 0;
     }
 }
+
 .overlay-content {
     background-color: unset;
 }

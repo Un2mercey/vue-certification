@@ -3,17 +3,43 @@ import CustomDialog from '@/ui/CustomDialog.vue';
 import { PlusIcon } from '@heroicons/vue/24/solid';
 import { computed, defineAsyncComponent, ref } from 'vue';
 
+/**
+ * @description Async Component
+ */
 const MovieForm = defineAsyncComponent(() => import('./MovieForm.vue'));
 const emit = defineEmits(['add:movie', 'edit:movie']);
 const modalTitle = ref('Add new movie');
 
+/**
+ * @type {Ref<HTMLFormElement | null>}
+ */
 const formRef = ref(null);
+
+/**
+ * @type {Ref<Movie | undefined>}
+ */
 const prefillForm = ref();
-const isFormValid = computed(() => formRef.value?.isFormValid);
+
+const isFormValid = computed(() => Boolean(formRef.value?.isFormValid));
+
+/**
+ * @type {ComputedRef<Function | undefined>}
+ */
 const validate = computed(() => formRef.value?.validate);
 
+/**
+ * @type {Ref<HTMLDialogElement | null>}
+ */
 const dialogRef = ref(null);
+
+/**
+ * @type {ComputedRef<Function | undefined>}
+ */
 const openDialog = computed(() => dialogRef.value?.open);
+
+/**
+ * @type {ComputedRef<Function | undefined>}
+ */
 const closeDialog = computed(() => dialogRef.value?.close);
 
 function showModal(title) {
@@ -69,8 +95,8 @@ defineExpose({ edit });
                 <span class="btn-content">cancel</span>
             </button>
             <button
-                class="dialog-confirm-btn"
                 :disabled="!isFormValid"
+                class="dialog-confirm-btn"
                 @click="validate"
             >
                 <span class="btn-content">save</span>

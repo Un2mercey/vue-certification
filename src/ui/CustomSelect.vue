@@ -106,8 +106,8 @@ onUpdated(() => {
 <template>
     <div
         ref="activator"
-        class="activator"
         :class="{ active: isOpened, error: hasError, valid: touched && !hasError }"
+        class="activator"
         @click="availableItems.length && (isOpened = true)"
     >
         <TransitionGroup name="list">

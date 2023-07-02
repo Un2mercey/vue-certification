@@ -1,10 +1,29 @@
 <script setup>
-import { items } from '@/mocks/movies.json';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import MovieList from '@/components/MovieList.vue';
 import ComponentLayout from '@/components/layout/ComponentLayout.vue';
 
-const movies = ref(items);
+const props = defineProps({
+    modelValue: {
+        type: Array,
+        default: () => [],
+    },
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+/**
+ * @type {WritableComputedRef<Movie[]>}
+ */
+const movies = computed({
+    get() {
+        return props.modelValue;
+    },
+    set(value) {
+        emit('update:modelValue', value);
+    },
+});
+
 const isLoading = ref(false);
 </script>
 

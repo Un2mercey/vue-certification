@@ -9,7 +9,15 @@ const props = defineProps({
     },
 });
 const emit = defineEmits(['update:rating', 'remove:movie', 'edit:movie']);
+
+/**
+ * @type {ComputedRef<Movie>}
+ */
 const movie = computed(() => props.movie);
+
+/**
+ * @type {WritableComputedRef<number>}
+ */
 const rating = computed({
     get() {
         return movie.value.rating;
@@ -21,6 +29,9 @@ const rating = computed({
 
 const hoveredRating = ref(0);
 
+/**
+ * @description Timing function to fill the stars
+ */
 function fillRating() {
     for (let i = 1; i <= rating.value + 1; i++) {
         setTimeout(() => {
@@ -42,8 +53,8 @@ onMounted(fillRating);
     >
         <div class="movie-item-image-wrapper">
             <img
+                :alt="'The poster of the \'${movie.name}\' movie'"
                 :src="movie.image"
-                :alt="`The poster of the \`${movie.name}\` movie`"
                 class="movie-item-image"
             />
             <div class="movie-item-top-rating-wrapper">
@@ -52,8 +63,8 @@ onMounted(fillRating);
                     :class="['movie-item-top-rating-icon', rating ? 'text-yellow-500' : 'text-gray-500']"
                 />
                 <span
-                    class="movie-item-top-rating-text"
                     :class="{ '--rated': rating }"
+                    class="movie-item-top-rating-text"
                 >
                     {{ rating || '-' }}
                 </span>
@@ -88,13 +99,13 @@ onMounted(fillRating);
                     <StarIcon
                         v-for="star in 5"
                         :key="`${movie.id}-star-${star}`"
-                        class="movie-item-star-icon"
                         :class="{
                             '--starred': hoveredRating > 0 ? star <= hoveredRating : star <= rating,
                             '--disabled': star === rating,
                         }"
-                        @mouseover="hoveredRating = star"
+                        class="movie-item-star-icon"
                         @click="star !== rating && (rating = star)"
+                        @mouseover="hoveredRating = star"
                     />
                 </div>
                 <Transition name="fade-fast">
