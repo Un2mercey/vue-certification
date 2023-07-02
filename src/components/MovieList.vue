@@ -1,5 +1,5 @@
 <script setup>
-import { ChartBarIcon } from '@heroicons/vue/24/outline';
+import { FilmIcon } from '@heroicons/vue/24/outline';
 import { computed, onBeforeUnmount, ref, watchEffect } from 'vue';
 import MovieModal from '@/components/MovieModal.vue';
 import MovieItem from './MovieItem.vue';
@@ -14,8 +14,17 @@ const props = defineProps({
         default: () => [],
     },
 });
+
 const emit = defineEmits(['update:isLoading', 'update:movies']);
+
+/**
+ * @type {Ref<HTMLDialogElement | null>}
+ */
 const movieModalRef = ref(null);
+
+/**
+ * @type {WritableComputedRef<Movie[]>}
+ */
 const movies = computed({
     get() {
         return props.movies;
@@ -24,11 +33,17 @@ const movies = computed({
         emit('update:movies', value);
     },
 });
+
 const avgRating = computed(() => {
     const sum = movies.value.reduce((acc, { rating }) => acc + rating, 0);
     return (sum / movies.value.length).toFixed(1);
 });
 
+/**
+ * @description Updates the movie rating
+ * @param {number} id
+ * @param {number} rating
+ */
 function updateMovieRating(id, rating) {
     movies.value = movies.value.map((movie) => {
         if (movie.id === id) movie.rating = rating;
@@ -36,6 +51,9 @@ function updateMovieRating(id, rating) {
     });
 }
 
+/**
+ * @description Removes all movie ratings in {@link movies}
+ */
 function removeRatings() {
     movies.value = movies.value.map((movie) => {
         movie.rating = null;
@@ -43,6 +61,11 @@ function removeRatings() {
     });
 }
 
+/**
+ * @description Adds the new one
+ *
+ * @param {Movie} movie
+ */
 function addMovie(movie) {
     movies.value = [
         ...movies.value,
@@ -54,6 +77,11 @@ function addMovie(movie) {
     ];
 }
 
+/**
+ * @description Edits the movie of {@link movies} list
+ *
+ * @param {Movie} form
+ */
 function editMovie(form) {
     movies.value = movies.value.map((movie) => {
         if (movie.id === form.id) return form;
@@ -61,11 +89,21 @@ function editMovie(form) {
     });
 }
 
+/**
+ * @description Opens the modal, changes the title
+ *
+ * @param {number} id
+ */
 function openEditModal(id) {
     const movie = movies.value.find((movie) => movie.id === id);
     movieModalRef.value.edit(movie);
 }
 
+/**
+ * @description Removes the movie from list by id
+ *
+ * @param {number} id
+ */
 function removeMovie(id) {
     movies.value = movies.value.filter((movie) => movie.id !== id);
 }
@@ -95,7 +133,7 @@ onBeforeUnmount(stopWatch);
 </script>
 
 <template>
-    <section class="movie-list-wrapper">
+    <div class="movie-list-wrapper">
         <div class="movie-list-header">
             <div class="movie-list-header-title">
                 total movies: {{ movies.length }}
@@ -111,7 +149,7 @@ onBeforeUnmount(stopWatch);
                     @click="removeRatings"
                 >
                     <span class="btn-content">
-                        <ChartBarIcon />
+                        <FilmIcon />
                         remove ratings
                     </span>
                 </button>
@@ -132,16 +170,16 @@ onBeforeUnmount(stopWatch);
                 @edit:movie="openEditModal"
             />
         </div>
-    </section>
+    </div>
 </template>
 
 <style scoped>
 .movie-list-wrapper {
-    @apply flex flex-col gap-2;
+    @apply flex flex-col gap-2 self-start m-auto;
 }
 
 .movie-list-header {
-    @apply flex items-center justify-between w-full max-w-7xl pr-8;
+    @apply flex items-center justify-between w-full max-w-7xl pr-8 py-1;
 }
 
 .movie-list-header-title {
@@ -153,7 +191,9 @@ onBeforeUnmount(stopWatch);
 }
 
 .movie-list {
-    @apply flex flex-wrap items-center justify-between max-w-7xl overflow-auto h-[860px];
+    @apply flex flex-wrap items-center justify-between max-w-7xl overflow-auto h-auto max-h-[800px];
+    min-height: 800px;
+    min-width: 850px;
 }
 
 .spacer {

@@ -1,17 +1,41 @@
 <script setup>
-import CustomLoader from '@/ui/CustomLoader.vue';
+import { items } from '@/mocks/movies.json';
 import { ref } from 'vue';
-import MovieList from '@/components/MovieList.vue';
-import { items } from './mocks/movies.json';
+import MainLayout from '@/components/layout/MainLayout.vue';
 
+/**
+ * Movie type declaration
+ *
+ * @typedef {Object} Movie
+ * @property {number} id
+ * @property {string} name
+ * @property {string} description
+ * @property {string} image
+ * @property {number} rating
+ * @property {string[]} genres
+ * @property {boolean} inTheaters
+ */
+
+/**
+ * Usage of {@link Movie}
+ *
+ * @type {Movie[]}
+ *
+ * @joke Better to call Pinia
+ */
 const movies = ref(items);
-const isLoading = ref(false);
 </script>
 
 <template>
-    <CustomLoader v-if="isLoading" />
-    <MovieList
-        v-model:is-loading="isLoading"
-        v-model:movies="movies"
-    />
+    <MainLayout>
+        <RouterView #="{ Component, route }">
+            <Transition name="fade">
+                <Component
+                    :is="Component"
+                    :key="route.fullPath"
+                    v-model="movies"
+                />
+            </Transition>
+        </RouterView>
+    </MainLayout>
 </template>

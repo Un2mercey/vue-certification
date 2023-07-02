@@ -23,8 +23,8 @@ const props = defineProps({
     <fieldset class="form-control">
         <div
             v-if="props.label"
-            class="form-control-label"
             :class="{ valid: props.touched && !props.hasError, error: props.hasError }"
+            class="form-control-label"
         >
             {{ props.label }}
         </div>

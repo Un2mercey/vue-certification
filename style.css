@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 #app {
-    @apply max-w-full flex items-center justify-center h-screen mx-auto;
+    @apply max-w-full h-screen block p-0 m-0 box-border;
+    overflow: hidden;
 }
 
 #overlay-container {
@@ -111,7 +112,8 @@ button:disabled {
 
 .btn-primary:hover {
     @apply bg-black;
-    box-shadow: rgba(0, 220, 130, 0.5) 0 0 10px 0, rgba(54, 228, 218, 0.5) 0 0 20px 0;
+    box-shadow: rgba(0, 220, 130, 0.5) 0 0 10px 0,
+        rgba(54, 228, 218, 0.5) 0 0 20px 0;
 }
 
 .btn-primary:focus-visible {
@@ -123,9 +125,14 @@ button:disabled {
     border: 0 solid #e5e7eb;
     box-sizing: border-box;
     transition: all 0.2s ease 0s;
-    content: "";
+    content: '';
     position: absolute;
-    background: linear-gradient(to right, rgb(0, 220, 130), rgb(54, 228, 218), rgb(22, 167, 158));
+    background: linear-gradient(
+        to right,
+        rgb(0, 220, 130),
+        rgb(54, 228, 218),
+        rgb(22, 167, 158)
+    );
     inset: -3px;
     z-index: -1;
     border-radius: 10px;
@@ -133,6 +140,18 @@ button:disabled {
 
 .btn-primary span.btn-content {
     @apply text-gray-100;
+}
+
+.btn-edit {
+    @apply hover:bg-violet-400 active:bg-violet-400;
+}
+
+.btn-remove {
+    @apply hover:bg-red-400 active:bg-red-400;
+}
+
+.btn-link {
+    @apply hover:bg-blue-400 active:bg-blue-400;
 }
 
 .error-messages {
@@ -159,6 +178,16 @@ button:disabled {
 .slide-fade-bottom-enter-from,
 .slide-fade-bottom-leave-to {
     @apply translate-y-[20px] opacity-0;
+}
+
+/* fade transition */
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s ease;
 }
 
 /* fade-fast transition */

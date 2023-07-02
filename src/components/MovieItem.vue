@@ -1,6 +1,9 @@
 <script setup>
-import { PencilIcon, StarIcon, TrashIcon } from '@heroicons/vue/24/solid';
+import { EyeIcon, PencilIcon, StarIcon, TrashIcon } from '@heroicons/vue/24/solid';
 import { computed, onMounted, ref } from 'vue';
+import { ROUTE_NAMES } from '@/utils';
+import MovieGenres from '@/components/MovieGenres.vue';
+import MovieStarRating from '@/components/MovieStarRating.vue';
 
 const props = defineProps({
     movie: {
@@ -9,7 +12,15 @@ const props = defineProps({
     },
 });
 const emit = defineEmits(['update:rating', 'remove:movie', 'edit:movie']);
+
+/**
+ * @type {ComputedRef<Movie>}
+ */
 const movie = computed(() => props.movie);
+
+/**
+ * @type {WritableComputedRef<number>}
+ */
 const rating = computed({
     get() {
         return movie.value.rating;
@@ -21,6 +32,9 @@ const rating = computed({
 
 const hoveredRating = ref(0);
 
+/**
+ * @description Timing function to fill the stars
+ */
 function fillRating() {
     for (let i = 1; i <= rating.value + 1; i++) {
         setTimeout(() => {
@@ -42,37 +56,18 @@ onMounted(fillRating);
     >
         <div class="movie-item-image-wrapper">
             <img
+                :alt="'The poster of the \'${movie.name}\' movie'"
                 :src="movie.image"
-                :alt="`The poster of the \`${movie.name}\` movie`"
                 class="movie-item-image"
             />
-            <div class="movie-item-top-rating-wrapper">
-                <StarIcon
-                    id="top-rating"
-                    :class="['movie-item-top-rating-icon', rating ? 'text-yellow-500' : 'text-gray-500']"
-                />
-                <span
-                    class="movie-item-top-rating-text"
-                    :class="{ '--rated': rating }"
-                >
-                    {{ rating || '-' }}
-                </span>
-            </div>
+            <MovieStarRating :rating="rating" />
         </div>
         <div class="movie-item-content-wrapper">
             <div class="movie-item-title-wrapper">
                 <h3 class="movie-item-title">
                     {{ movie.name }}
                 </h3>
-                <div class="movie-item-genres-wrapper">
-                    <span
-                        v-for="genre in movie.genres"
-                        :key="`${movie.id}-${genre}`"
-                        class="movie-item-genre-tag"
-                    >
-                        {{ genre }}
-                    </span>
-                </div>
+                <MovieGenres :genres="movie.genres" />
             </div>
             <div class="movie-item-description-wrapper scrollbar-thin --light">
                 <p class="movie-item-description">
@@ -88,13 +83,13 @@ onMounted(fillRating);
                     <StarIcon
                         v-for="star in 5"
                         :key="`${movie.id}-star-${star}`"
-                        class="movie-item-star-icon"
                         :class="{
                             '--starred': hoveredRating > 0 ? star <= hoveredRating : star <= rating,
                             '--disabled': star === rating,
                         }"
-                        @mouseover="hoveredRating = star"
+                        class="movie-item-star-icon"
                         @click="star !== rating && (rating = star)"
+                        @mouseover="hoveredRating = star"
                     />
                 </div>
                 <Transition name="fade-fast">
@@ -118,6 +113,13 @@ onMounted(fillRating);
                                 <TrashIcon />
                             </span>
                         </button>
+                        <RouterLink :to="{ name: ROUTE_NAMES.MOVIE, params: { id: movie.id } }">
+                            <button class="btn-icon icon-m btn-link">
+                                <span class="btn-content">
+                                    <EyeIcon />
+                                </span>
+                            </button>
+                        </RouterLink>
                     </div>
                 </Transition>
             </div>
@@ -133,22 +135,6 @@ onMounted(fillRating);
 
 .movie-item-image-wrapper {
     @apply h-[520px] overflow-hidden w-full relative;
-}
-
-.movie-item-top-rating-wrapper {
-    @apply absolute top-1 right-1 flex justify-center items-center;
-}
-
-.movie-item-top-rating-icon {
-    @apply h-16 w-16;
-}
-
-.movie-item-top-rating-text {
-    @apply absolute font-bold text-xl text-gray-400;
-}
-
-.--rated {
-    @apply text-yellow-800;
 }
 
 .movie-item-image {
@@ -173,14 +159,6 @@ onMounted(fillRating);
 
 .movie-item-description {
     @apply text-sm;
-}
-
-.movie-item-genres-wrapper {
-    @apply flex flex-wrap items-center justify-start gap-1;
-}
-
-.movie-item-genre-tag {
-    @apply text-xs bg-indigo-500 text-white py-0.5 px-2 rounded-full;
 }
 
 .movie-item-rating-wrapper {
@@ -209,13 +187,5 @@ onMounted(fillRating);
 
 .movie-item-actions-wrapper {
     @apply flex gap-3 justify-center items-center self-stretch ml-auto;
-}
-
-.btn-edit {
-    @apply hover:bg-violet-400 active:bg-violet-400;
-}
-
-.btn-remove {
-    @apply hover:bg-red-400 active:bg-red-400;
 }
 </style>
