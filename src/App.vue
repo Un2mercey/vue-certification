@@ -20,6 +20,8 @@ import MainLayout from '@/components/layout/MainLayout.vue';
  * Usage of {@link Movie}
  *
  * @type {Movie[]}
+ *
+ * @joke Better to call Pinia
  */
 const movies = ref(items);
 </script>

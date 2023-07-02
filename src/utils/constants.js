@@ -1,6 +1,6 @@
 export const ROUTE_URLS = Object.freeze({
     HOME: '/',
-    MOVIE: '/movie/:id(\\d+)',
+    MOVIE: '/movie/:id(^0\\d+)',
     NOT_FOUND: '/:pathMatch(.*)*',
 });
 
