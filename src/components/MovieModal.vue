@@ -3,6 +3,13 @@ import CustomDialog from '@/ui/CustomDialog.vue';
 import { PlusIcon } from '@heroicons/vue/24/solid';
 import { computed, defineAsyncComponent, ref } from 'vue';
 
+defineProps({
+    hideActivator: {
+        type: Boolean,
+        default: false,
+    },
+});
+
 /**
  * @description Async Component
  */
@@ -69,7 +76,10 @@ defineExpose({ edit });
         ref="dialogRef"
         :title="modalTitle"
     >
-        <template #activator>
+        <template
+            v-if="!hideActivator"
+            #activator
+        >
             <button
                 class="btn-primary"
                 @click="showModal('Add new movie')"
