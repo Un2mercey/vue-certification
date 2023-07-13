@@ -2,8 +2,8 @@
 import { EyeIcon, PencilIcon, StarIcon, TrashIcon } from '@heroicons/vue/24/solid';
 import { computed, onMounted, ref } from 'vue';
 import { ROUTE_NAMES } from '@/utils';
-import MovieGenres from '@/components/MovieGenres.vue';
-import MovieStarRating from '@/components/MovieStarRating.vue';
+import MovieGenres from '@/components/movie/MovieGenres.vue';
+import MovieStarRating from '@/components/movie/MovieStarRating.vue';
 
 const props = defineProps({
     movie: {

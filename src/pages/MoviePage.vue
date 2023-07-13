@@ -1,12 +1,12 @@
 <script setup>
-import { ArrowLeftIcon, ArrowRightIcon, HomeIcon, PencilIcon } from '@heroicons/vue/24/solid';
+import { ArrowLeftIcon, ArrowRightIcon, PencilIcon } from '@heroicons/vue/24/solid';
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { ROUTE_NAMES } from '@/utils';
-import MovieGenres from '@/components/MovieGenres.vue';
-import MovieModal from '@/components/MovieModal.vue';
-import MovieStarRating from '@/components/MovieStarRating.vue';
 import ComponentLayout from '@/components/layout/ComponentLayout.vue';
+import MovieModal from '@/components/modal/MovieModal.vue';
+import MovieGenres from '@/components/movie/MovieGenres.vue';
+import MovieStarRating from '@/components/movie/MovieStarRating.vue';
 
 const props = defineProps({
     modelValue: {
@@ -91,25 +91,6 @@ function editMovie(form) {
 
 <template>
     <ComponentLayout>
-        <div class="top-wrapper">
-            <div class="btn-home-wrapper">
-                <RouterLink :to="{ name: ROUTE_NAMES.HOME }">
-                    <button class="btn-primary btn-icon icon-m">
-                        <span class="btn-content">
-                            <HomeIcon />
-                        </span>
-                    </button>
-                </RouterLink>
-            </div>
-            <button
-                class="btn-primary btn-icon icon-m"
-                @click="openEditModal"
-            >
-                <span class="btn-content">
-                    <PencilIcon />
-                </span>
-            </button>
-        </div>
         <div
             class="btn-back-wrapper"
             :class="{ '--disabled': !prevMovieId }"
@@ -137,7 +118,15 @@ function editMovie(form) {
                     :genres="movie.genres"
                     class="mb-3"
                 />
-                <p class="text-xl">{{ movie.description }}</p>
+                <p class="text-xl mb-4">{{ movie.description }}</p>
+                <button
+                    class="btn-primary btn-icon icon-m"
+                    @click="openEditModal"
+                >
+                    <span class="btn-content">
+                        <PencilIcon />
+                    </span>
+                </button>
             </div>
         </div>
         <div
@@ -161,10 +150,6 @@ function editMovie(form) {
 </template>
 
 <style scoped>
-.top-wrapper {
-    @apply absolute flex top-4 gap-4 items-center justify-center flex-1;
-}
-
 .btn-back-wrapper,
 .btn-forward-wrapper {
     @apply relative;

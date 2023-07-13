@@ -13,7 +13,7 @@ defineProps({
 /**
  * @description Async Component
  */
-const MovieForm = defineAsyncComponent(() => import('./MovieForm.vue'));
+const MovieForm = defineAsyncComponent(() => import('../movie/MovieForm.vue'));
 const emit = defineEmits(['add:movie', 'edit:movie']);
 const modalTitle = ref('Add new movie');
 

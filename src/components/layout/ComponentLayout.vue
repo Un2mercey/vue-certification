@@ -18,10 +18,6 @@ defineProps({
 
 <style scoped>
 .component-wrapper {
-    @apply flex items-center justify-center p-4 m-0;
-
-    width: inherit;
-    height: inherit;
-    overflow: hidden;
+    @apply flex items-center justify-center p-4 m-0 h-full;
 }
 </style>

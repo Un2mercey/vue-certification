@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 #app {
-    @apply max-w-full h-screen block p-0 m-0 box-border;
+    @apply max-w-full h-screen flex p-0 m-0 box-border;
     overflow: hidden;
 }
 
