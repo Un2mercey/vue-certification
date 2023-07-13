@@ -1,7 +1,7 @@
 <script setup>
 import { FilmIcon } from '@heroicons/vue/24/outline';
 import { computed, onBeforeUnmount, ref, watchEffect } from 'vue';
-import MovieModal from '@/components/MovieModal.vue';
+import MovieModal from '@/components/modal/MovieModal.vue';
 import MovieItem from './MovieItem.vue';
 
 const props = defineProps({

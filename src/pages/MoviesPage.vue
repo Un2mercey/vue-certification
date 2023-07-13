@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue';
-import MovieList from '@/components/MovieList.vue';
 import ComponentLayout from '@/components/layout/ComponentLayout.vue';
+import MovieList from '@/components/movie/MovieList.vue';
 
 const props = defineProps({
     modelValue: {
