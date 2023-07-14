@@ -23,6 +23,13 @@ const HomePage = () => import('@/pages/MoviesPage.vue');
 const MoviePage = () => import('@/pages/MoviePage.vue');
 
 /**
+ * Async component
+ *
+ * @type {() => Promise<RouteComponent>}
+ */
+const NewYearCountDownPage = () => import('@/pages/NewYearCountdownPage.vue');
+
+/**
  * Initializing the routes
  *
  *
@@ -40,6 +47,11 @@ const routes = Object.freeze([
         path: ROUTE_URLS.MOVIE,
         name: ROUTE_NAMES.MOVIE,
         component: MoviePage,
+    },
+    {
+        path: ROUTE_URLS.NEW_YEAR_COUNTDOWN,
+        name: ROUTE_NAMES.NEW_YEAR_COUNTDOWN,
+        component: NewYearCountDownPage,
     },
     {
         path: ROUTE_URLS.NOT_FOUND,

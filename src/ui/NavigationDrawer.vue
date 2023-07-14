@@ -1,12 +1,12 @@
 <script setup>
-import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon, FilmIcon } from '@heroicons/vue/24/outline';
+import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon, ClockIcon, FilmIcon } from '@heroicons/vue/24/outline';
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { ROUTE_NAMES } from '@/utils';
 
 const rail = ref(false);
 const width = computed(() => {
-    if (rail.value) return '216px';
+    if (rail.value) return '252px';
     else return '72px';
 });
 
@@ -14,9 +14,13 @@ const railIcon = computed(() => (rail.value && ChevronDoubleLeftIcon) || Chevron
 const links = ref([
     {
         icon: FilmIcon,
-        text: 'Movie App',
+        text: 'Movies',
         routeName: ROUTE_NAMES.HOME,
-        path: { to: ROUTE_NAMES.HOME },
+    },
+    {
+        icon: ClockIcon,
+        text: 'New Year Countdown',
+        routeName: ROUTE_NAMES.NEW_YEAR_COUNTDOWN,
     },
 ]);
 
@@ -99,7 +103,7 @@ defineExpose({ width });
 }
 
 .nav-list {
-    @apply px-4 pb-4 flex flex-col gap-2;
+    @apply px-4 pb-4 flex flex-col gap-4;
 }
 
 .nav-list-item {
