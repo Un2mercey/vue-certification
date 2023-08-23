@@ -103,7 +103,7 @@ defineExpose({ width });
 }
 
 .nav-list {
-    @apply px-4 pb-4 flex flex-col gap-4;
+    @apply px-4 pb-4 flex flex-col gap-4 flex-nowrap text-ellipsis overflow-hidden whitespace-nowrap;
 }
 
 .nav-list-item {
